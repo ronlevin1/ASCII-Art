@@ -1,5 +1,6 @@
 package image;
 
+//TODO: document
 import java.awt.*;
 import java.io.IOException;
 

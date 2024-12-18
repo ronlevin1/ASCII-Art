@@ -1,5 +1,6 @@
 package ascii_art;
 
+//TODO: document
 import image.Image;
 import image.SubImagesHolder;
 import image_char_matching.SubImgCharMatcher;

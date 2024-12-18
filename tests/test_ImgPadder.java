@@ -50,3 +50,32 @@
 //    }
 //}
 //
+
+// test for SubImagesHolder
+//public static void main(String[] args) throws IOException {
+////        Image image = new Image("examples/cat.jpeg");
+////        ImagePadder padder = new ImagePadder(image);
+////        Image paddedImage = padder.pad();
+////        paddedImage.saveImage("padded_cat");
+////        // create sub images of the padded image.
+////        SubImagesHolder sub = new SubImagesHolder(paddedImage, 2);
+////        //output subImage[0][0], subImage[1][1]
+////        SubImage[][] subImages = sub.getSubImages();
+////        subImages[0][0].saveImage("subImage_0_0");
+////        subImages[0][1].saveImage("subImage_0_1");
+////        subImages[1][0].saveImage("subImage_1_0");
+////        subImages[1][1].saveImage("subImage_1_1");
+//
+//        Image image = new Image("examples/board.jpeg");
+//        ImagePadder padder = new ImagePadder(image);
+//        Image paddedImage = padder.pad();
+//        paddedImage.saveImage("padded_board");
+//        // create sub images of the padded image.
+//        SubImagesHolder sub = new SubImagesHolder(paddedImage, 2);
+//        //output subImage[0][0], subImage[1][1]
+//        SubImage[][] subImages = sub.getSubImages();
+//        subImages[0][0].saveImage("subBoard_0_0");
+//        subImages[0][1].saveImage("subBoard_0_1");
+//        subImages[1][0].saveImage("subBoard_1_0");
+//        subImages[1][1].saveImage("subBoard_1_1");
+//    }

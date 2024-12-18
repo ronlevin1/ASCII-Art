@@ -1,6 +1,7 @@
 package image;
-
+//TODO: document
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * A package-private class of the package image.
@@ -10,47 +11,48 @@ public class SubImagesHolder {
 
     private final Image image;
     private int resolution;
-    private int subImageSquareSize;
+    private int subImgSize;
     private SubImage[][] subImages;
 
     public SubImage[][] getSubImages() {
         return subImages;
     }
 
+    public double getBrightness(int i, int j) {
+        return subImages[i][j].getBrightness();
+    }
 
     public SubImagesHolder(Image image, int resolution) {
         this.image = image;
         this.resolution = resolution;
-        this.subImageSquareSize = image.getWidth() / resolution;
-
+        this.subImgSize = image.getWidth() / resolution;
         this.subImages =
-                new SubImage[image.getHeight() / resolution][image.getWidth() / resolution];
-//        this.createSubImages();
+                new SubImage[image.getHeight() / subImgSize][resolution];
+        this.createSubImages();
     }
 
-    //TODO: test this method
     private void createSubImages() {
         // Image -> subImages
-        for (int i = 0; i < image.getHeight(); i += subImageSquareSize) {
-            for (int j = 0; j < image.getWidth(); j += subImageSquareSize) {
-                // iterate over the sub-image
-                // (jump between 'squares' of resolution x resolution)
-                Color[][] curSubImage =
-                        new Color[subImageSquareSize][subImageSquareSize];
-                for (int k = 0; k < subImageSquareSize; k++) {
-                    for (int l = 0; l < subImageSquareSize; l++) {
-                        // iterate 'square' inner-pixels
+        // iterate over the sub-images
+        // (jump between 'squares' of subImageSize x subImageSize)
+        for (int i = 0; i < image.getHeight(); i += subImgSize) {
+            for (int j = 0; j < image.getWidth(); j += subImgSize) {
+                // create a sub-image matrix of (subImageSize x subImageSize)
+                Color[][] curSubImage = new Color[subImgSize][subImgSize];
+                // iterate 'square' inner-pixels
+                for (int k = 0; k < subImgSize; k++) {
+                    for (int l = 0; l < subImgSize; l++) {
+                        // fill sub-image matrix with appropriate pixels.
+                        //todo: check pixel calculation
+                        //int pixelX = Math.min(i + k, image.getHeight() - 1);
+                        //int pixelY = Math.min(j + l, image.getWidth() - 1);
                         curSubImage[k][l] = image.getPixel(i + k, j + l);
                     }
                 }
-                this.subImages[i / subImageSquareSize][j / subImageSquareSize] =
-                        new SubImage(curSubImage, subImageSquareSize,
-                                subImageSquareSize);
+                // create a SubImage object from the sub-image matrix.
+                this.subImages[i / subImgSize][j / subImgSize] =
+                        new SubImage(curSubImage, subImgSize, subImgSize);
             }
         }
-    }
-
-    public double getBrightness(int i, int j) {
-        return subImages[i][j].getBrightness();
     }
 }

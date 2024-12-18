@@ -1,5 +1,6 @@
 package image;
 
+//TODO: document
 import image_char_matching.SubImgCharMatcher;
 
 import java.awt.*;
@@ -50,6 +51,4 @@ public class SubImage extends Image {
         // normalize the brightness to be between 0 and 1.
         return totalBrightness / (dims * MAX_RGB_VALUE);
     }
-
-
 }
