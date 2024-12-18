@@ -16,6 +16,8 @@ public class Image {
     private final Color[][] pixelArray;
     private final int width;
     private final int height;
+//    private int resolution;
+//    private Image[][] subImages;
 
     public Image(String filename) throws IOException {
         BufferedImage im = ImageIO.read(new File(filename));
@@ -48,6 +50,10 @@ public class Image {
     public Color getPixel(int x, int y) {
         return pixelArray[x][y];
     }
+
+//    public void setPixel(int x, int y, Color color) {
+//        pixelArray[x][y] = color;
+//    }
 
     public void saveImage(String fileName) {
         // Initialize BufferedImage, assuming Color[][] is already properly

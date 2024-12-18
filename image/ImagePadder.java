@@ -1,9 +1,11 @@
 package image;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class ImagePadder {
     private final Image image;
+    // half of the padding on each side.
     private final int paddingX;
     private final int paddingY;
 
@@ -15,11 +17,10 @@ public class ImagePadder {
          both 2^k for some k.
          padding is simetric on each side.
          */
-        this.paddingX = calcPadding(image.getWidth());
-        this.paddingY = calcPadding(image.getHeight());
+        this.paddingX = calcHalfPadding(image.getWidth());
+        this.paddingY = calcHalfPadding(image.getHeight());
     }
 
-    //TODO: tests manually using given examples
     public Image pad() {
         int newWidth = image.getWidth() + 2 * paddingX;
         int newHeight = image.getHeight() + 2 * paddingY;
@@ -31,7 +32,7 @@ public class ImagePadder {
                     newPixelArray[i][j] = new Color(255, 255, 255);
                 } else {
                     // else, set the pixel to the original image's pixel.
-                    newPixelArray[i][j] = image.getPixel(i - paddingX,
+                    newPixelArray[i][j] = image.getPixel(i - paddingY,
                             j - paddingX);
                 }
             }
@@ -45,7 +46,8 @@ public class ImagePadder {
      * @param dim the dimension to pad. Must be positive and even.
      * @return the padding needed, ON EACH SIDE.
      */
-    private int calcPadding(int dim) {
+    private int calcHalfPadding(int dim) {
+        // if the dimension is not even, throw an exception.
         if (dim % 2 != 0) {
             throw new IllegalArgumentException("Dimension must be even.");
         }
@@ -56,4 +58,12 @@ public class ImagePadder {
         int nextPowerOf2 = (int) Math.pow(2, k);
         return (nextPowerOf2 - dim) / 2;
     }
+
+    // Main used for Testing.
+//    public static void main(String[] args) throws IOException {
+//        Image image = new Image("examples/board.jpeg");
+//        ImagePadder padder = new ImagePadder(image);
+//        Image paddedImage = padder.pad();
+//        paddedImage.saveImage("padded_board");
+//    }
 }
