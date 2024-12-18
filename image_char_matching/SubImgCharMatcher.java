@@ -63,7 +63,8 @@ public class SubImgCharMatcher {
 
     private void normalizeCharsetBrightness() {
         for (MyChar c : charset) {
-            c.setNormalizedBrightness((c.getNormalizedBrightness() - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
+            double curBrightness = c.getBooleanBrightness();
+            c.setNormalizedBrightness((curBrightness - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
         }
     }
 
@@ -100,18 +101,19 @@ public class SubImgCharMatcher {
      * @param c the character to add.
      */
     public void addChar(char c) {
+        //TODO: test
         MyChar newChar = new MyChar(c);
         double curBrightness = newChar.getBooleanBrightness();
         charset.add(newChar);
         boolean isMinMaxChanged = false;
         // update brightness: min, max (fields) and normalized (foreach char)
         if (curBrightness < minBoolBrightness) {
-            minBoolBrightness = newChar.getBooleanBrightness();
+            minBoolBrightness = curBrightness;
             isMinMaxChanged = true;
         }
         // update top brightness
         if (curBrightness > maxBoolBrightness) {
-            maxBoolBrightness = newChar.getBooleanBrightness();
+            maxBoolBrightness = curBrightness;
             isMinMaxChanged = true;
         }
         // if changed: update normalized brightness for all chars
@@ -120,7 +122,7 @@ public class SubImgCharMatcher {
             normalizeCharsetBrightness();
         } else {
             //otherwise, update only the new char's normalized brightness
-            newChar.setNormalizedBrightness((newChar.getBooleanBrightness() - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
+            newChar.setNormalizedBrightness((curBrightness - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
         }
 //        normalizeCharsetBrightness();
     }
@@ -131,18 +133,18 @@ public class SubImgCharMatcher {
      * @param c the character to remove.
      */
     public void removeChar(char c) {
-        charset.remove(new MyChar(c));
+        //TODO: test
+        MyChar newChar = new MyChar(c);
+        double curBrightness = newChar.getBooleanBrightness();
+        charset.remove(newChar);
         /*
         update brightness: min, max (fields) and normalized (foreach char).
         reset min and max brightness since removed char is not necessarily
         the min or max brightness char.
          */
-        minBoolBrightness = Double.MAX_VALUE;
-        maxBoolBrightness = Double.MIN_VALUE;
-        for (MyChar myChar : charset) {
-            updateMinMaxBoolBrightness(myChar.getNormalizedBrightness());
+        if (curBrightness == minBoolBrightness || curBrightness == maxBoolBrightness) {
+            updateMinMaxBoolBrightness();
+            normalizeCharsetBrightness();
         }
-        normalizeCharsetBrightness();
-
     }
 }

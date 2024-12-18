@@ -16,9 +16,9 @@ public class Shell {
     private static final int DEFUALT_RES = 2;
     private static final String DEFUALT_ROUND = "abs";
     private static final char[] DEFUALT_CHARSET = "0123456789".toCharArray();
-    private static final char[] DEFUALT_CHARSET_ALL =
-            ("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-                    "~!@#$%^&*()_+ ;").toCharArray();
+    // all ascii chars in range 32 to 126, including.
+    private static final char[] CHARSET_ALL_ASCII = new char[95];
+
     private static final String DEFUALT_OUTPUT_METHOD = "console";
 
     private SubImgCharMatcher matcher;
@@ -49,6 +49,10 @@ public class Shell {
         this.resolution = resolution;
         this.subImgsHolder = new SubImagesHolder(image, resolution);
 //        this.subImgsHolder.getImage().saveImage("examples/afterHolder");
+
+        for(int i = 32; i <= 126; i++) {
+            CHARSET_ALL_ASCII[i - 32] = (char) i;
+        }
     }
     /*
     ---------------------
@@ -85,8 +89,13 @@ public class Shell {
         // send args to Ctor
         handleArgs(args);
         // run
-        Shell shell = new Shell("examples/cat.jpeg", DEFUALT_CHARSET,
-                128, DEFUALT_ROUND);
+        char[] allChars = new char[95];
+        for(int i = 32; i <= 126; i++) {
+            allChars[i - 32] = (char) i;
+        }
+        //todo
+        Shell shell = new Shell("examples/cat.jpeg", allChars,
+                256, DEFUALT_ROUND);
         shell.run("examples/cat.jpeg");
 
 

@@ -13,14 +13,14 @@ public class MyChar {
 
     public MyChar(char c) {
         this.c = c;
-        this.booleanBrightness = calcCharBrightness(c);
+        this.booleanBrightness = calcBooleanBrightness(c);
         this.normalizedBrightness = 0;
         // TODO: consider moving to a map at SubImgCharMatcher.java
         //       char -> norm
 
     }
 
-    private double calcCharBrightness(char c) {
+    private double calcBooleanBrightness(char c) {
         boolean[][] charBrightnessArr = CharConverter.convertToBoolArray(c);
         double charBrightness = 0;
         for (boolean[] booleans : charBrightnessArr) {
