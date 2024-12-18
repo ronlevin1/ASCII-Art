@@ -14,8 +14,8 @@ public class SubImgCharMatcher {
     // fields
     private final HashSet<MyChar> charset = new HashSet<>();
     private final String round;
-    private double minBrightness = Double.MAX_VALUE;
-    private double maxBrightness = Double.MIN_VALUE;
+    private double minBoolBrightness = Double.MAX_VALUE;
+    private double maxBoolBrightness = Double.MIN_VALUE;
 
     /**
      * Default constructor.
@@ -23,9 +23,9 @@ public class SubImgCharMatcher {
      * @param charset the characters to match to.
      */
     public SubImgCharMatcher(char[] charset) {
-        for (char c : charset) {
-            this.charset.add(new MyChar(c));
-        }
+        unpackCharset(charset);
+        updateMinMaxBoolBrightness();
+        normalizeCharsetBrightness();
         this.round = DEFUALT_ROUND;
     }
 
@@ -36,10 +36,35 @@ public class SubImgCharMatcher {
      * @param round   the rounding method to use.
      */
     public SubImgCharMatcher(char[] charset, String round) {
+        unpackCharset(charset);
+        updateMinMaxBoolBrightness();
+        normalizeCharsetBrightness();
+        this.round = round;
+    }
+
+    private void unpackCharset(char[] charset) {
         for (char c : charset) {
             this.charset.add(new MyChar(c));
         }
-        this.round = round;
+    }
+
+    private void updateMinMaxBoolBrightness() {
+        // update min and max brightness
+        for (MyChar c : charset) {
+            double curBrightness = c.getBooleanBrightness();
+            if (curBrightness < this.minBoolBrightness) {
+                this.minBoolBrightness = curBrightness;
+            }
+            if (curBrightness > this.maxBoolBrightness) {
+                this.maxBoolBrightness = curBrightness;
+            }
+        }
+    }
+
+    private void normalizeCharsetBrightness() {
+        for (MyChar c : charset) {
+            c.setNormalizedBrightness((c.getNormalizedBrightness() - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
+        }
     }
 
     /**
@@ -53,10 +78,10 @@ public class SubImgCharMatcher {
     public char getCharByImageBrightness(double brightness) {
         double minDiff = Double.MAX_VALUE;
         char bestMatch = charset.iterator().next().getChar();
+        //
         for (MyChar c : charset) {
-            double charBrightness = c.getBrightness();
-            updateMinMaxBrightness(charBrightness);
-            //TODO check if this is the right way to round according to the round field
+            double charBrightness = c.getNormalizedBrightness();
+            //TODO add switch for round
             double diff = Math.abs(charBrightness - brightness);
             if (diff < minDiff) {
                 minDiff = diff;
@@ -68,15 +93,6 @@ public class SubImgCharMatcher {
         return bestMatch;
     }
 
-    private void updateMinMaxBrightness(double charBrightness) {
-        // update min and max brightness
-        if(charBrightness < minBrightness) {
-            minBrightness = charBrightness;
-        }
-        if(charBrightness > maxBrightness) {
-            maxBrightness = charBrightness;
-        }
-    }
 
     /**
      * Adds a character to the charset.
@@ -85,10 +101,28 @@ public class SubImgCharMatcher {
      */
     public void addChar(char c) {
         MyChar newChar = new MyChar(c);
+        double curBrightness = newChar.getBooleanBrightness();
         charset.add(newChar);
+        boolean isMinMaxChanged = false;
         // update brightness: min, max (fields) and normalized (foreach char)
-        updateMinMaxBrightness(newChar.getBrightness());
-        normalizeSetBrightness();
+        if (curBrightness < minBoolBrightness) {
+            minBoolBrightness = newChar.getBooleanBrightness();
+            isMinMaxChanged = true;
+        }
+        // update top brightness
+        if (curBrightness > maxBoolBrightness) {
+            maxBoolBrightness = newChar.getBooleanBrightness();
+            isMinMaxChanged = true;
+        }
+        // if changed: update normalized brightness for all chars
+        if (isMinMaxChanged) {
+            //updateMinMaxBoolBrightness();
+            normalizeCharsetBrightness();
+        } else {
+            //otherwise, update only the new char's normalized brightness
+            newChar.setNormalizedBrightness((newChar.getBooleanBrightness() - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
+        }
+//        normalizeCharsetBrightness();
     }
 
     /**
@@ -103,18 +137,12 @@ public class SubImgCharMatcher {
         reset min and max brightness since removed char is not necessarily
         the min or max brightness char.
          */
-        minBrightness = Double.MAX_VALUE;
-        maxBrightness = Double.MIN_VALUE;
+        minBoolBrightness = Double.MAX_VALUE;
+        maxBoolBrightness = Double.MIN_VALUE;
         for (MyChar myChar : charset) {
-            updateMinMaxBrightness(myChar.getBrightness());
+            updateMinMaxBoolBrightness(myChar.getNormalizedBrightness());
         }
-        normalizeSetBrightness();
+        normalizeCharsetBrightness();
 
-    }
-
-    public void normalizeSetBrightness() {
-        for (MyChar c : charset) {
-            c.setNormalizedBrightness((c.getBrightness() - minBrightness) / (maxBrightness - minBrightness));
-        }
     }
 }

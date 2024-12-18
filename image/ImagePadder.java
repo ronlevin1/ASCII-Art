@@ -59,12 +59,4 @@ public class ImagePadder {
         int nextPowerOf2 = (int) Math.pow(2, k);
         return (nextPowerOf2 - dim) / 2;
     }
-
-    // Main used for Testing.
-//    public static void main(String[] args) throws IOException {
-//        Image image = new Image("examples/board.jpeg");
-//        ImagePadder padder = new ImagePadder(image);
-//        Image paddedImage = padder.pad();
-//        paddedImage.saveImage("padded_board");
-//    }
 }

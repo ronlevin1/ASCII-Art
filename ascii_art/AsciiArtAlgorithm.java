@@ -4,11 +4,9 @@ import image.SubImagesHolder;
 import image_char_matching.SubImgCharMatcher;
 
 public class AsciiArtAlgorithm {
-    //    private final char[][] asciiChars; // output
     private final SubImgCharMatcher matcher;
     private final SubImagesHolder subImagesHolder;
 
-    // todo: check if it needs matchers or charset or hashset of MyChar
     public AsciiArtAlgorithm(
             SubImgCharMatcher matcher,
             SubImagesHolder subImagesHolder) {
@@ -39,14 +37,23 @@ public class AsciiArtAlgorithm {
         3. return asciiChars (or - save it in some format).
         ---------------------
          */
-        // given sub-images already in gray-scale !
-        // iterate over the sub-images
+        int numOfRows = subImagesHolder.getSubImages().length;
+        int numOfCols = subImagesHolder.getSubImages()[0].length;
+        char[][] asciiChars = new char[numOfRows][numOfCols];
+        double curBrightness = 0;
 
-        char[][] asciiChars;
+        for (int i = 0; i < numOfRows; i++) {
+            for (int j = 0; j < numOfCols; j++) {
 
-
-        //imageAndItSubImages.getSubImages()[i][j].getBrightness()
-        return null;
-        //return asciiChars;
+                curBrightness = subImagesHolder.getBrightness(i, j);
+//                String outName = (String.format("tests/asciiAlgo/%d_%d",
+//                i, j));
+//                subImagesHolder.getSubImages()[i][j].saveImage(outName);
+                char bestMatch =
+                        matcher.getCharByImageBrightness(curBrightness);
+                asciiChars[i][j] = bestMatch;
+            }
+        }
+        return asciiChars;
     }
 }

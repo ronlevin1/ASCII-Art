@@ -8,12 +8,12 @@ import java.util.Objects;
 public class MyChar {
 
     private char c;
-    private double brightness;
+    private double booleanBrightness;
     private double normalizedBrightness;
 
     public MyChar(char c) {
         this.c = c;
-        this.brightness = calcCharBrightness(c);
+        this.booleanBrightness = calcCharBrightness(c);
         this.normalizedBrightness = 0;
         // TODO: consider moving to a map at SubImgCharMatcher.java
         //       char -> norm
@@ -37,8 +37,12 @@ public class MyChar {
         return c;
     }
 
-    public double getBrightness() {
-        return brightness;
+    public double getNormalizedBrightness() {
+        return normalizedBrightness;
+    }
+
+    public double getBooleanBrightness() {
+        return booleanBrightness;
     }
 
     public void setNormalizedBrightness(double normalizedBrightness) {
@@ -62,7 +66,4 @@ public class MyChar {
         return Objects.hash(c);
     }
 
-    public double getNormalizedBrightness() {
-        return normalizedBrightness;
-    }
 }

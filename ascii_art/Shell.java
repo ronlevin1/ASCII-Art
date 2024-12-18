@@ -1,15 +1,26 @@
 package ascii_art;
 
 //TODO: document
+import ascii_output.AsciiOutput;
+import ascii_output.ConsoleAsciiOutput;
+import ascii_output.HtmlAsciiOutput;
 import image.Image;
+import image.ImagePadder;
 import image.SubImagesHolder;
 import image_char_matching.SubImgCharMatcher;
 
 import java.io.IOException;
 
 public class Shell {
-    // todo: check which one is needed
-//    private MyChar[] charset;
+
+    private static final int DEFUALT_RES = 2;
+    private static final String DEFUALT_ROUND = "abs";
+    private static final char[] DEFUALT_CHARSET = "0123456789".toCharArray();
+    private static final char[] DEFUALT_CHARSET_ALL =
+            ("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                    "~!@#$%^&*()_+ ;").toCharArray();
+    private static final String DEFUALT_OUTPUT_METHOD = "console";
+
     private SubImgCharMatcher matcher;
     private Image image;
     private int resolution;
@@ -22,7 +33,22 @@ public class Shell {
             1.1. padd image.
     */
 
-    public Shell() {
+    public Shell(String imagePath, char[] charset, int resolution,
+                 String round) {
+        // padd image
+        try {
+            Image original_image = new Image(imagePath);
+//            original_image.saveImage("examples/original.jpg");
+            ImagePadder padder = new ImagePadder(original_image);
+            this.image = padder.pad();
+//            this.image.saveImage("examples/padded.jpg");
+        } catch (IOException e) {
+            e.printStackTrace(); // todo: handle exception
+        }
+        this.matcher = new SubImgCharMatcher(charset, round);
+        this.resolution = resolution;
+        this.subImgsHolder = new SubImagesHolder(image, resolution);
+//        this.subImgsHolder.getImage().saveImage("examples/afterHolder");
     }
     /*
     ---------------------
@@ -34,14 +60,40 @@ public class Shell {
             2.1. convert sub-image to greyscale brightness.
      */
     public void run(String imageName) throws IOException {
-        this.image = new Image(imageName);
+        // Load and pad image
+//        try {
+//            Image original_image = new Image(imageName);
+//            ImagePadder padder = new ImagePadder(original_image);
+//            this.image = padder.pad();
+//        } catch (IOException e) {
+//            e.printStackTrace(); // todo: handle exception
+//        }
         // ...
-//        SubImage[][] subImages = subImgsHolder.getSubImages();
         char[][] asciiChars = new AsciiArtAlgorithm(matcher,
                 subImgsHolder).run();
+        //todo: choose/switch according to user input. def is console.
+//        AsciiOutput consoleOutput = new ConsoleAsciiOutput();
+//        consoleOutput.out(asciiChars);
+        //
+        if (true) {
+            AsciiOutput htmlOutput = new HtmlAsciiOutput("ascii.html", "Courier New");
+            htmlOutput.out(asciiChars);
+        }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // send args to Ctor
+        handleArgs(args);
+        // run
+        Shell shell = new Shell("examples/cat.jpeg", DEFUALT_CHARSET,
+                128, DEFUALT_ROUND);
+        shell.run("examples/cat.jpeg");
+
+
+        // imagePath, charset, resolution, round
+    }
+
+    private static void handleArgs(String[] args) {
+
     }
 }

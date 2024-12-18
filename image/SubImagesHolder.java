@@ -9,6 +9,7 @@ import java.io.IOException;
  */
 public class SubImagesHolder {
 
+
     private final Image image;
     private int resolution;
     private int subImgSize;
@@ -16,6 +17,10 @@ public class SubImagesHolder {
 
     public SubImage[][] getSubImages() {
         return subImages;
+    }
+
+    public Image getImage() {
+        return image;
     }
 
     public double getBrightness(int i, int j) {

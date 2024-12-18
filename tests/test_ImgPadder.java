@@ -51,6 +51,14 @@
 //}
 //
 
+//Testing of ImagePadder.java
+//    public static void main(String[] args) throws IOException {
+//        Image image = new Image("examples/board.jpeg");
+//        ImagePadder padder = new ImagePadder(image);
+//        Image paddedImage = padder.pad();
+//        paddedImage.saveImage("padded_board");
+//    }
+
 // test for SubImagesHolder
 //public static void main(String[] args) throws IOException {
 ////        Image image = new Image("examples/cat.jpeg");
