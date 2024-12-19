@@ -1,7 +1,9 @@
 package image_char_matching;
 
 
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.stream.Stream;
 
 /**
  * A package-private class of the package image_char_matching.
@@ -11,9 +13,11 @@ import java.util.HashSet;
 public class SubImgCharMatcher {
     // consts
     private static final String DEFUALT_ROUND = "abs";
+    private static final String CMD_UP = "up";
+    private static final String CMD_DOWN = "down";
     // fields
     private final HashSet<MyChar> charset = new HashSet<>();
-    private final String round;
+    private String roundMethod;
     private double minBoolBrightness = Double.MAX_VALUE;
     private double maxBoolBrightness = Double.MIN_VALUE;
 
@@ -23,26 +27,27 @@ public class SubImgCharMatcher {
      * @param charset the characters to match to.
      */
     public SubImgCharMatcher(char[] charset) {
-        unpackCharset(charset);
+        setCharset(charset);
         updateMinMaxBoolBrightness();
         normalizeCharsetBrightness();
-        this.round = DEFUALT_ROUND;
+        this.roundMethod = DEFUALT_ROUND;
     }
 
     /**
-     * Constructor.
+     * Second Constructor to accept round method var.
      *
-     * @param charset the characters to match to.
-     * @param round   the rounding method to use.
+     * @param charset     the characters to match to.
+     * @param roundMethod the rounding method to use.
      */
-    public SubImgCharMatcher(char[] charset, String round) {
-        unpackCharset(charset);
+    public SubImgCharMatcher(char[] charset, String roundMethod) {
+        //todo: change this Ctor to public method called resetMatcher?
+        setCharset(charset);
         updateMinMaxBoolBrightness();
         normalizeCharsetBrightness();
-        this.round = round;
+        this.roundMethod = roundMethod;
     }
 
-    private void unpackCharset(char[] charset) {
+    private void setCharset(char[] charset) {
         for (char c : charset) {
             this.charset.add(new MyChar(c));
         }
@@ -82,8 +87,29 @@ public class SubImgCharMatcher {
         //
         for (MyChar c : charset) {
             double charBrightness = c.getNormalizedBrightness();
-            //TODO add switch for round
-            double diff = Math.abs(charBrightness - brightness);
+            double diff;
+            //todo: test this switch
+            switch (this.roundMethod) {
+                case DEFUALT_ROUND:
+                    diff = Math.abs(charBrightness - brightness);
+                    break;
+                case CMD_UP:
+                    // makes choose of char with brightness closest from above
+                    diff = (charBrightness - brightness);
+                    if (diff < 0)
+                        // char brightness is BELOW image brightness
+                        continue;
+                    break;
+                case CMD_DOWN:
+                    // makes choose of char with brightness closest from below
+                    diff = (brightness - charBrightness);
+                    if (diff < 0)
+                        // char brightness is ABOVE image brightness
+                        continue;
+                    break;
+                default:
+                    diff = Math.abs(charBrightness - brightness);
+            }
             if (diff < minDiff) {
                 minDiff = diff;
                 bestMatch = c.getChar();
@@ -103,9 +129,14 @@ public class SubImgCharMatcher {
     public void addChar(char c) {
         //TODO: test
         MyChar newChar = new MyChar(c);
+        if (charset.contains(newChar)) {
+            return;
+        }
+
         double curBrightness = newChar.getBooleanBrightness();
         charset.add(newChar);
         boolean isMinMaxChanged = false;
+
         // update brightness: min, max (fields) and normalized (foreach char)
         if (curBrightness < minBoolBrightness) {
             minBoolBrightness = curBrightness;
@@ -135,6 +166,9 @@ public class SubImgCharMatcher {
     public void removeChar(char c) {
         //TODO: test
         MyChar newChar = new MyChar(c);
+        if (!charset.contains(newChar)) {
+            return;
+        }
         double curBrightness = newChar.getBooleanBrightness();
         charset.remove(newChar);
         /*
@@ -146,5 +180,23 @@ public class SubImgCharMatcher {
             updateMinMaxBoolBrightness();
             normalizeCharsetBrightness();
         }
+    }
+
+    public void printCharset() {
+        if (this.charset.isEmpty()) {
+            return;
+        }
+        // sort and print
+        Stream<MyChar> charStream =
+                charset.stream().sorted(Comparator.comparingInt(MyChar::getChar));
+        charStream.forEach(c -> System.out.print(c.getChar() + " "));
+    }
+
+    public void setRoundMethod(String roundMethod) {
+        this.roundMethod = roundMethod;
+    }
+
+    public int getCharsetSize() {
+        return charset.size();
     }
 }
