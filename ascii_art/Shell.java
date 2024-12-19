@@ -82,9 +82,9 @@ public class Shell {
             String arg2 = "";
             if (userInput.length > 1) {
                 arg2 = userInput[1];
-            }
-            // if cmd valid, execute (ignore cmd tail if exists).
-            switch (arg1) {
+            } // if
+            // execute cmd (ignore its tail if exists).
+            switch (arg1) { // todo: test all!
                 case CMD_CHARS:
                     matcher.printCharset();
                     break;
@@ -108,8 +108,11 @@ public class Shell {
                     break;
                 default:
                     System.out.println(errMsg); //todo: throw exception?
-            }
-        }
+            } // switch
+        } // while
+    } // method
+
+
 //        try {
 //            Image original_image = new Image(imageName);
 //            ImagePadder padder = new ImagePadder(original_image);
@@ -117,11 +120,11 @@ public class Shell {
 //        } catch (IOException e) {
 //            e.printStackTrace(); // todo: handle exception
 //        }
-    }
+
 
     private void handleRun() {
         String errMsg = "Did not execute. Charset is too small.";
-        if(this.matcher.getCharsetSize() <2) {
+        if (this.matcher.getCharsetSize() < 2) {
             System.out.println(errMsg); //todo: throw exception?
             return;
         }
@@ -130,8 +133,7 @@ public class Shell {
         if (this.outputMethod.equals(DEFAULT_OUTPUT_METHOD)) {
             AsciiOutput consoleOutput = new ConsoleAsciiOutput();
             consoleOutput.out(asciiChars);
-        }
-        else {
+        } else {
             AsciiOutput htmlOutput = new HtmlAsciiOutput("out.html",
                     DEFAULT_FONT);
             htmlOutput.out(asciiChars);
@@ -154,7 +156,8 @@ public class Shell {
     }
 
     private void handleOutputMethod(String arg2) {
-        String errMsg = "Did not change output method due to incorrect format.";
+        String errMsg = "Did not change output method due to incorrect " +
+                "format.";
         switch (arg2) {
             case DEFAULT_OUTPUT_METHOD:
                 this.outputMethod = DEFAULT_OUTPUT_METHOD;
@@ -238,9 +241,10 @@ public class Shell {
         } // switch
         // finally, execute given command according to charset
         executeAddRemoveOnMatcher(isAdd, charset);
-    }
+    } // method
 
-    private void executeAddRemoveOnMatcher(boolean isAdd, List<Character> charset) {
+    private void executeAddRemoveOnMatcher(boolean isAdd,
+                                           List<Character> charset) {
         if (isAdd)
             for (char c : charset)
                 matcher.addChar(c);
