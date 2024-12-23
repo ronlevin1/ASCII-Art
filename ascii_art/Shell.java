@@ -55,7 +55,7 @@ public class Shell {
     private String outputMethod;
 
     public Shell(String imagePath, char[] charset, int resolution,
-                 String round) {
+                 String roundMethod) {
         // padd image
         try {
             Image original_image = new Image(imagePath);
@@ -64,7 +64,7 @@ public class Shell {
         } catch (IOException e) {
             e.printStackTrace(); // todo: handle exception
         }
-        this.matcher = new SubImgCharMatcher(charset, round);
+        this.matcher = new SubImgCharMatcher(charset, roundMethod);
         this.resolution = resolution;
         this.subImgsHolder = new SubImagesHolder(image, resolution);
         this.outputMethod = DEFAULT_OUTPUT_METHOD;
@@ -266,21 +266,12 @@ public class Shell {
      * @throws IOException if an I/O error occurs.
      */
     public static void main(String[] args) throws IOException {
-        // args? : imagePath, charset, resolution, round
-        // send args to Ctor
-//            handleArgs(args);
-        // run
-        char[] allChars = new char[95];
-        for (int i = 32; i <= 126; i++) {
-            allChars[i - 32] = (char) i;
-        }
-        //todo
-        Shell shell = new Shell("examples/cat.jpeg", allChars,
-                256, DEFAULT_ROUND_METHOD);
-        shell.run("examples/cat.jpeg");
+        // parse args. input format: java shell <imagePath>.
+        String imagePath = args[0];
+        // todo: test valid image path
+        Shell shell = new Shell(imagePath, DEFAULT_CHARSET,
+                DEFAULT_RES, DEFAULT_ROUND_METHOD);
+        shell.run(imagePath);
     }
 }
-//        private static void handleArgs (String[]args){
-//
-//        }
 
