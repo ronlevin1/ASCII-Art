@@ -76,8 +76,12 @@ public class Shell {
         //todo: catch exception HERE! and output error message.
         String[] userInput = {""};
         while (!userInput[0].equals(CMD_EXIT)) {
-            System.out.print(">>> ");
-            userInput = KeyboardInput.readLine().split(" ");
+            System.out.print(">>> "); // todo: change print location
+//            userInput = KeyboardInput.readLine().split(" ");
+            // ---------------------------------
+            String cmd = "add X";
+            userInput = cmd.split(" ");
+            // ---------------------------------
             String arg1 = userInput[0];
             String arg2 = "";
             if (userInput.length > 1) {
@@ -88,22 +92,22 @@ public class Shell {
                 case CMD_CHARS:
                     matcher.printCharset();
                     break;
-                case CMD_ADD:
+                case CMD_ADD: // todo: handle single char input
                     handleAddRemove(arg2, true);
                     break;
-                case CMD_REMOVE:
+                case CMD_REMOVE: // todo
                     handleAddRemove(arg2, false);
                     break;
-                case CMD_RES:
+                case CMD_RES: // todo
                     handleResolution(arg2);
                     break;
-                case CMD_ROUND:
+                case CMD_ROUND: // todo
                     handleRoundMethod(arg2);
                     break;
-                case CMD_OUTPUT:
+                case CMD_OUTPUT: // todo
                     handleOutputMethod(arg2);
                     break;
-                case CMD_RUN:
+                case CMD_RUN: // todo
                     handleRun();
                     break;
                 default:
@@ -212,6 +216,8 @@ public class Shell {
             return;
         }
         List<Character> charset = new ArrayList<>();
+        //todo: handle single char input
+
         // check input of the format "add m-p"
         if (arg2.length() == 3) {
             if (arg2.charAt(1) == '-') {
@@ -219,6 +225,8 @@ public class Shell {
                 int end = Math.max(arg2.charAt(0), arg2.charAt(2));
                 if (MIN_ASCII <= start && end <= MAX_ASCII)
                     fillCharsetList(start, end, charset);
+                    // fill charset to matcher
+                    // return;
                 else {
                     System.out.println("did not " + cmd + " due to incorrect" +
                             " format."); //todo: throw exception?
@@ -235,9 +243,11 @@ public class Shell {
                 charset.add(' ');
                 break;
             default:
-                System.out.println("did not " + cmd + " due to incorrect" +
-                        " format."); //todo: throw exception?
-                return;
+                if (charset.isEmpty()) {
+                    System.out.println("did not " + cmd + " due to incorrect" +
+                            " format."); //todo: throw exception?
+                    return;
+                }
         } // switch
         // finally, execute given command according to charset
         executeAddRemoveOnMatcher(isAdd, charset);
@@ -267,11 +277,14 @@ public class Shell {
      */
     public static void main(String[] args) throws IOException {
         // parse args. input format: java shell <imagePath>.
-        String imagePath = args[0];
+//        String imagePath = args[0];
         // todo: test valid image path
+        String imagePath = "/cs/usr/ron.levin1/IdeaProjects/ASCII_Art" +
+                "/examples/cat.jpeg";
         Shell shell = new Shell(imagePath, DEFAULT_CHARSET,
                 DEFAULT_RES, DEFAULT_ROUND_METHOD);
         shell.run(imagePath);
     }
 }
-
+// CLI:
+// java ascii_art/Shell.java /cs/usr/ron.levin1/IdeaProjects/ASCII_Art/examples/cat.jpeg

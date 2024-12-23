@@ -191,6 +191,7 @@ public class SubImgCharMatcher {
         Stream<MyChar> charStream =
                 charset.stream().sorted(Comparator.comparingInt(MyChar::getChar));
         charStream.forEach(c -> System.out.print(c.getChar() + " "));
+        System.out.println();
     }
 
     public void setRoundMethod(String roundMethod) {
