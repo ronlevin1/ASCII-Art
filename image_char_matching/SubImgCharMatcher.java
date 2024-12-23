@@ -54,6 +54,9 @@ public class SubImgCharMatcher {
     }
 
     private void updateMinMaxBoolBrightness() {
+        // reset values
+        minBoolBrightness = Double.MAX_VALUE;
+        maxBoolBrightness = Double.MIN_VALUE;
         // update min and max brightness
         for (MyChar c : charset) {
             double curBrightness = c.getBooleanBrightness();
@@ -127,15 +130,14 @@ public class SubImgCharMatcher {
      * @param c the character to add.
      */
     public void addChar(char c) {
-        //TODO: test
         MyChar newChar = new MyChar(c);
         if (charset.contains(newChar)) {
             return;
         }
-
+        //
+        boolean isMinMaxChanged = false;
         double curBrightness = newChar.getBooleanBrightness();
         charset.add(newChar);
-        boolean isMinMaxChanged = false;
 
         // update brightness: min, max (fields) and normalized (foreach char)
         if (curBrightness < minBoolBrightness) {
@@ -164,7 +166,6 @@ public class SubImgCharMatcher {
      * @param c the character to remove.
      */
     public void removeChar(char c) {
-        //TODO: test
         MyChar newChar = new MyChar(c);
         if (!charset.contains(newChar)) {
             return;
@@ -199,4 +200,79 @@ public class SubImgCharMatcher {
     public int getCharsetSize() {
         return charset.size();
     }
+//    // uncomment for testing
+//    static void addChar_addsNewCharToCharset() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b'});
+//        matcher.addChar('c');
+//        assert (3 == matcher.getCharsetSize());
+//    }
+//
+//    static void addChar_doesNotAddDuplicateChar() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b'});
+//        matcher.addChar('a');
+//        assert (2 == matcher.getCharsetSize());
+//    }
+//
+//    static void addChar_updatesMinMaxBrightness() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b'});
+//        matcher.addChar('c');
+//        assert (matcher.getCharsetSize() > 2);
+//    }
+//
+//    static void addChar_normalizesBrightnessForAllChars() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b'});
+//        matcher.addChar(' '); // zero brightness
+//        matcher.addChar('#'); // max brightness
+//        matcher.addChar('c'); // middle brightness
+//    }
+//
+//    //
+//    static void removeChar_removesExistingCharFromCharset() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b', 'c'});
+//        matcher.removeChar('b');
+//        assert (2 == matcher.getCharsetSize());
+//    }
+//
+//    static void removeChar_doesNotRemoveNonExistingChar() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b'});
+//        matcher.removeChar('c');
+//        assert (2 == matcher.getCharsetSize());
+//    }
+//
+//    static void removeChar_updatesMinMaxBrightnessAfterRemoval() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b', 'c'});
+//        matcher.removeChar('a'); // assuming 'a' has mid brightness
+//        assert (matcher.getCharsetSize() == 2);
+//    }
+//
+//    static void removeChar_normalizesBrightnessForAllCharsAfterRemoval() {
+//        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
+//                'b', ' ', '#'});
+//        matcher.removeChar('#'); // assuming 'a' has min brightness
+//        matcher.removeChar(' '); // assuming 'c' has max brightness
+//        assert (matcher.getCharsetSize() == 2);
+//    }
+//
+//    public static void main(String[] args) {
+//        // test add
+////        addChar_addsNewCharToCharset();
+////        addChar_doesNotAddDuplicateChar();
+////        addChar_updatesMinMaxBrightness();
+////        addChar_normalizesBrightnessForAllChars();
+//        // test remove
+////        removeChar_removesExistingCharFromCharset();
+////        removeChar_doesNotRemoveNonExistingChar();
+////        removeChar_updatesMinMaxBrightnessAfterRemoval();
+////        removeChar_normalizesBrightnessForAllCharsAfterRemoval();
+//    }
 }
+//}
+
+
