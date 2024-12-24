@@ -44,6 +44,9 @@ public class Shell {
     private static final String CMD_DOWN = "down";
     public static final String CMD_HTML = "html";
     public static final String DEFAULT_FONT = "Courier New";
+    public static final int EXIT_CHECK_NEXT_CONDITION = -1;
+    public static final int EXIT_FAILURE = 0;
+    public static final int EXIT_SUCCESS = 1;
 
     // all ascii chars in range 32 to 126, including.
 //    private static final char[] CHARSET_ALL_ASCII = new char[95];
@@ -216,42 +219,92 @@ public class Shell {
             return;
         }
         List<Character> charset = new ArrayList<>();
-        //todo: handle single char input
+        /*
+        flag values meaning:
+        1 if successful -> add char to charset and return.
+        0 if failed -> print error message and return.
+        -1 if not a single char -> continue to next check.
+         */
+        int flag1 = trySingleCharCMD(arg2, charset);
+        int flag2 = tryAllOrSpaceCMD(arg2, charset, cmd);
+        int flag3 = tryRangeCMD(arg2, charset, cmd);
+        if (flag1 == EXIT_SUCCESS || flag2 == EXIT_SUCCESS || flag3 ==
+                EXIT_SUCCESS) {
+            //todo: check if overlapping between flags is possible?
+            executeAddRemoveOnMatcher(isAdd, charset);
+            return;
+        }
+        if (flag1 == EXIT_FAILURE || flag2 == EXIT_FAILURE || flag3 ==
+                EXIT_FAILURE) {
+            System.out.println("did not " + cmd + " due to incorrect" +
+                    " format.");
+            return;
+        }
+        // flags are EXIT_CHECK_NEXT_CONDITION
+        //todo: reformat err msg
+        System.out.println("did not " + cmd + " due to incorrect" +
+                " format.");
+    } // method
 
+    /**
+     * @return 1 if successful, 0 if failed, -1 if not a single char.
+     */
+    private static int trySingleCharCMD(String arg2, List<Character> charset) {
+        if (arg2.length() == 1) {
+            int asciiVal = arg2.charAt(0);
+            if (MIN_ASCII <= asciiVal && asciiVal <= MAX_ASCII) {
+                charset.add(arg2.charAt(0));
+                return EXIT_SUCCESS;
+            }
+            // single char is illegal
+            return EXIT_FAILURE;
+        }
+        // maybe arg2 is not a single char
+        return EXIT_CHECK_NEXT_CONDITION;
+    }
+
+    /**
+     * @return true if successful, false otherwise.
+     */
+    private int tryRangeCMD(String arg2, List<Character> charset,
+                            String cmd) {
         // check input of the format "add m-p"
         if (arg2.length() == 3) {
             if (arg2.charAt(1) == '-') {
                 int start = Math.min(arg2.charAt(0), arg2.charAt(2));
                 int end = Math.max(arg2.charAt(0), arg2.charAt(2));
-                if (MIN_ASCII <= start && end <= MAX_ASCII)
+                if (MIN_ASCII <= start && end <= MAX_ASCII) {
                     fillCharsetList(start, end, charset);
                     // fill charset to matcher
-                    // return;
-                else {
-                    System.out.println("did not " + cmd + " due to incorrect" +
-                            " format."); //todo: throw exception?
-                    return;
-                }
+                    return EXIT_SUCCESS;
+                } // if range
+                // range is illegal
+                return EXIT_FAILURE;
             } // if '-'
+            // maybe arg2 is "all".
+            return EXIT_CHECK_NEXT_CONDITION;
         } // if length
+        // maybe arg2 is "space".
+        return EXIT_CHECK_NEXT_CONDITION;
+    }
+
+    /**
+     * @return 1 if successful, 0 if failed, -1 if not a single char.
+     */
+    private int tryAllOrSpaceCMD(String arg2, List<Character> charset,
+                                 String cmd) {
         // check input of the format "add/remove all" or "add/remove space"
         switch (arg2) {
             case CMD_ALL:
                 fillCharsetList(MIN_ASCII, MAX_ASCII, charset);
-                break;
+                return EXIT_SUCCESS;
             case CMD_SPACE:
                 charset.add(' ');
-                break;
+                return EXIT_SUCCESS;
             default:
-                if (charset.isEmpty()) {
-                    System.out.println("did not " + cmd + " due to incorrect" +
-                            " format."); //todo: throw exception?
-                    return;
-                }
+                return EXIT_CHECK_NEXT_CONDITION;
         } // switch
-        // finally, execute given command according to charset
-        executeAddRemoveOnMatcher(isAdd, charset);
-    } // method
+    }
 
     private void executeAddRemoveOnMatcher(boolean isAdd,
                                            List<Character> charset) {
@@ -287,4 +340,5 @@ public class Shell {
     }
 }
 // CLI:
-// java ascii_art/Shell.java /cs/usr/ron.levin1/IdeaProjects/ASCII_Art/examples/cat.jpeg
+// java ascii_art/Shell.java /cs/usr/ron
+// .levin1/IdeaProjects/ASCII_Art/examples/cat.jpeg
