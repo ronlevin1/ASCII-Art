@@ -1,3 +1,5 @@
+package ascii_art;
+
 // Base Exception Class
 public class AsciiArtException extends Exception {
     public AsciiArtException(String message) {

@@ -201,6 +201,7 @@ public class SubImgCharMatcher {
     public int getCharsetSize() {
         return charset.size();
     }
+
 //    // uncomment for testing
 //    static void addChar_addsNewCharToCharset() {
 //        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
