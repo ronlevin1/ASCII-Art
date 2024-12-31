@@ -3,8 +3,7 @@ package ascii_art;
 //TODO: document
 
 import ascii_art.new_exceptions.AsciiArtException;
-import ascii_art.new_exceptions.InvalidCharsetException;
-import ascii_art.new_exceptions.InvalidCommandException;
+import ascii_art.new_exceptions.ExecutionCommandException;
 import ascii_output.AsciiOutput;
 import ascii_output.ConsoleAsciiOutput;
 import ascii_output.HtmlAsciiOutput;
@@ -123,13 +122,13 @@ public class Shell {
                 handleRun();
                 break;
             default:
-                throw new InvalidCommandException();
+                throw new ExecutionCommandException(false);
         } // switch
     }
 
     private void handleRun() throws AsciiArtException {
         if (this.matcher.getCharsetSize() < 2) {
-            throw new InvalidCharsetException(false, false);
+            throw new ExecutionCommandException(true);
         }
         char[][] asciiChars =
                 new AsciiArtAlgorithm(matcher, subImgsHolder).run();
