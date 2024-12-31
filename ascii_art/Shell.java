@@ -50,15 +50,13 @@ public class Shell {
     private static final String CMD_UP = "up";
     private static final String CMD_DOWN = "down";
     private static final String CMD_HTML = "html";
-    // all ascii chars in range 32 to 126, including.
-    // private static final char[] CHARSET_ALL_ASCII = new char[95];
 
     // fields
-    private SubImgCharMatcher matcher;
     private Image image;
     private int resolution;
-    private SubImagesHolder subImgsHolder;
     private String outputMethod;
+    private SubImagesHolder subImgsHolder;
+    private SubImgCharMatcher matcher;
 
     public Shell(char[] charset, int resolution,
                  String roundMethod) {
@@ -90,14 +88,10 @@ public class Shell {
             String arg2 = "";
             if (userInput.length > 1)
                 arg2 = userInput[1];
-//                // -----------FOR TESTING------------------
-//                arg1 = "add";
-//                arg2 = "$";
-//                // ---------------------------------
             try {
                 executeCommand(arg1, arg2);
             } catch (AsciiArtException e) {
-                 System.out.println(e.getMessage());
+                System.out.println(e.getMessage());
             }
         } // while
     } // method
@@ -105,26 +99,27 @@ public class Shell {
     private void executeCommand(String arg1, String arg2) throws AsciiArtException {
         String errMsg = "Did not execute due to incorrect command.";
         // execute cmd (ignore its tail if exists).
-        switch (arg1) { // todo: test all!
+        // todo exceptions for all cases
+        switch (arg1) {
             case CMD_CHARS:
                 matcher.printCharset();
                 break;
-            case CMD_ADD: // todo: handle single char input
+            case CMD_ADD:
                 handleAddRemove(arg2, true);
                 break;
-            case CMD_REMOVE: // todo
+            case CMD_REMOVE:
                 handleAddRemove(arg2, false);
                 break;
-            case CMD_RES: // todo
+            case CMD_RES:
                 handleResolution(arg2);
                 break;
-            case CMD_ROUND: // todo
+            case CMD_ROUND:
                 handleRoundMethod(arg2);
                 break;
-            case CMD_OUTPUT: // todo
+            case CMD_OUTPUT:
                 handleOutputMethod(arg2);
                 break;
-            case CMD_RUN: // todo
+            case CMD_RUN:
                 handleRun();
                 break;
             default:
@@ -134,7 +129,7 @@ public class Shell {
 
     private void handleRun() throws AsciiArtException {
         if (this.matcher.getCharsetSize() < 2) {
-            throw new InvalidCharsetException(false,false);
+            throw new InvalidCharsetException(false, false);
         }
         char[][] asciiChars =
                 new AsciiArtAlgorithm(matcher, subImgsHolder).run();
@@ -152,6 +147,9 @@ public class Shell {
         String errMsg = "Did not change rounding method due to incorrect " +
                 "format.";
         switch (arg2) {
+            case DEFAULT_ROUND_METHOD:
+                matcher.setRoundMethod(DEFAULT_ROUND_METHOD);
+                break;
             case CMD_UP:
                 matcher.setRoundMethod(CMD_UP);
                 break;
@@ -208,7 +206,9 @@ public class Shell {
             //todo: throw exception?
             return;
         }
+        // update res & create new subImagesHolder
         this.resolution = newRes;
+        this.subImgsHolder = new SubImagesHolder(image, resolution);
         System.out.println(String.format(outMsg, this.resolution));
     }
 
@@ -232,7 +232,6 @@ public class Shell {
         int flag3 = tryRangeCMD(arg2, charset, cmd);
         if (flag1 == EXIT_SUCCESS || flag2 == EXIT_SUCCESS || flag3 ==
                 EXIT_SUCCESS) {
-            //todo: check if overlapping between flags is possible?
             executeAddRemoveOnMatcher(isAdd, charset);
             return;
         }
@@ -331,13 +330,16 @@ public class Shell {
      */
     public static void main(String[] args) {
         // parse args. input format: java shell <imagePath>.
-        String imagePath = "/cs/usr/ron.levin1/IdeaProjects/ASCII_Art" +
-                "/examples/cat.jpeg";
+//        String imagePath = "/cs/usr/ron.levin1/IdeaProjects/ASCII_Art" +
+//                "/examples/cat.jpeg";
         Shell shell = new Shell(DEFAULT_CHARSET,
                 DEFAULT_RES, DEFAULT_ROUND_METHOD);
-        shell.run(imagePath);
+//        shell.run(imagePath);
+        shell.run(args[0]);
     }
 }
 // CLI:
-// java ascii_art/Shell.java /cs/usr/ron
-// .levin1/IdeaProjects/ASCII_Art/examples/cat.jpeg
+// java ascii_art/Shell.java /cs/usr/ron.levin1/IdeaProjects/ASCII_Art/ascii_art/Shell.java
+
+// presubmit: CLI
+// ~oop1/ex3_presubmit /cs/usr/ron.levin1/Desktop/ex3.zip
