@@ -3,14 +3,16 @@ package ascii_art.new_exceptions;
 /**
  * Exception thrown when an invalid command is encountered in the ASCII art application.
  */
-public class InvalidCommandException extends AsciiArtException {
+public class ExecutionCommandException extends AsciiArtException {
     public static final String DEFAULT_MESSAGE = "Did not execute due to incorrect command.";
+    public static final String CHARSET_TOO_SMALL = "Did not execute. Charset" +
+            " is too small.";
 
     /**
      * Constructs a new InvalidCommandException with the default message.
      */
-    public InvalidCommandException() {
-        super(DEFAULT_MESSAGE);
+    public ExecutionCommandException(boolean isCharsetTooSmall) {
+        super(isCharsetTooSmall? CHARSET_TOO_SMALL: DEFAULT_MESSAGE);
     }
 
     /**
@@ -18,7 +20,7 @@ public class InvalidCommandException extends AsciiArtException {
      *
      * @param message the detail message
      */
-    public InvalidCommandException(String message) {
+    public ExecutionCommandException(String message) {
         super(message);
     }
 }

@@ -3,13 +3,13 @@ package ascii_art.new_exceptions;
 /**
  * Exception thrown when an invalid rounding mode is encountered.
  */
-public class InvalidRoundingModeException extends AsciiArtException {
+public class RoundingMethodException extends AsciiArtException {
     public static final String INCORRECT_FORMAT = "Did not change rounding method due to incorrect format.";
 
     /**
      * Constructs a new InvalidRoundingModeException with the default message.
      */
-    public InvalidRoundingModeException() {
+    public RoundingMethodException() {
         super(INCORRECT_FORMAT);
     }
 
@@ -18,7 +18,7 @@ public class InvalidRoundingModeException extends AsciiArtException {
      *
      * @param message the detail message
      */
-    public InvalidRoundingModeException(String message) {
+    public RoundingMethodException(String message) {
         super(message);
     }
 }

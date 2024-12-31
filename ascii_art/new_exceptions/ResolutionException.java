@@ -4,14 +4,14 @@ package ascii_art.new_exceptions;
 /**
  * Exception thrown when an invalid resolution is encountered in ASCII art processing.
  */
-public class InvalidResolutionException extends AsciiArtException {
+public class ResolutionException extends AsciiArtException {
     public static final String EXCEEDING_BOUNDARIES = "Did not change resolution due to exceeding boundaries.";
     public static final String INCORRECT_FORMAT = "Did not change resolution due to incorrect format.";
 
     /**
      * Constructs a new InvalidResolutionException with a default message indicating exceeding boundaries.
      */
-    public InvalidResolutionException() {
+    public ResolutionException() {
         super(EXCEEDING_BOUNDARIES);
     }
 
@@ -20,7 +20,7 @@ public class InvalidResolutionException extends AsciiArtException {
      *
      * @param incorrectFormat if true, sets the message to indicate incorrect format; otherwise, exceeding boundaries.
      */
-    public InvalidResolutionException(boolean incorrectFormat) {
+    public ResolutionException(boolean incorrectFormat) {
         super(incorrectFormat ? INCORRECT_FORMAT : EXCEEDING_BOUNDARIES);
     }
 
@@ -29,7 +29,7 @@ public class InvalidResolutionException extends AsciiArtException {
      *
      * @param message the detail message.
      */
-    public InvalidResolutionException(String message) {
+    public ResolutionException(String message) {
         super(message);
     }
 }
