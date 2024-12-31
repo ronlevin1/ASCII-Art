@@ -2,6 +2,9 @@ package ascii_art;
 
 //TODO: document
 
+import ascii_art.new_exceptions.AsciiArtException;
+import ascii_art.new_exceptions.InvalidCharsetException;
+import ascii_art.new_exceptions.InvalidCommandException;
 import ascii_output.AsciiOutput;
 import ascii_output.ConsoleAsciiOutput;
 import ascii_output.HtmlAsciiOutput;
@@ -47,9 +50,9 @@ public class Shell {
     private static final String CMD_UP = "up";
     private static final String CMD_DOWN = "down";
     private static final String CMD_HTML = "html";
-
     // all ascii chars in range 32 to 126, including.
     // private static final char[] CHARSET_ALL_ASCII = new char[95];
+
     // fields
     private SubImgCharMatcher matcher;
     private Image image;
@@ -73,14 +76,13 @@ public class Shell {
             ImagePadder padder = new ImagePadder(original_image);
             this.image = padder.pad();
             this.subImgsHolder = new SubImagesHolder(image, resolution);
-            // todo: maybe invalid imageName should not terminate the
-            //  program? check this!
         } catch (IOException e) {
-            throw new RuntimeException(e); // todo
+            // todo: print err msg?
+            return; // terminate program
         }
         // Main user input loop
         while (true) {
-            System.out.print(">>> "); // todo: change print location
+            System.out.print(">>> ");
             String[] userInput = KeyboardInput.readLine().split(" ");
             String arg1 = userInput[0];
             if (arg1.equals(CMD_EXIT))
@@ -94,15 +96,13 @@ public class Shell {
 //                // ---------------------------------
             try {
                 executeCommand(arg1, arg2);
-            } catch (InvalidCommandException e) {
-                e.printStackTrace(); // todo: handle exception
-            } catch (Exception e) {
-                throw new RuntimeException(e); // todo: handle exception
+            } catch (AsciiArtException e) {
+                 System.out.println(e.getMessage());
             }
         } // while
     } // method
 
-    private void executeCommand(String arg1, String arg2) throws Exception {
+    private void executeCommand(String arg1, String arg2) throws AsciiArtException {
         String errMsg = "Did not execute due to incorrect command.";
         // execute cmd (ignore its tail if exists).
         switch (arg1) { // todo: test all!
@@ -128,15 +128,13 @@ public class Shell {
                 handleRun();
                 break;
             default:
-                System.out.println(errMsg); //todo: throw exception?
+                throw new InvalidCommandException();
         } // switch
     }
 
-    private void handleRun() throws Exception {
-        String errMsg = "Did not execute. Charset is too small.";
+    private void handleRun() throws AsciiArtException {
         if (this.matcher.getCharsetSize() < 2) {
-            System.out.println(errMsg); //todo: throw exception?
-            return;
+            throw new InvalidCharsetException(false,false);
         }
         char[][] asciiChars =
                 new AsciiArtAlgorithm(matcher, subImgsHolder).run();
@@ -150,7 +148,7 @@ public class Shell {
         }
     }
 
-    private void handleRoundMethod(String arg2) throws Exception {
+    private void handleRoundMethod(String arg2) throws AsciiArtException {
         String errMsg = "Did not change rounding method due to incorrect " +
                 "format.";
         switch (arg2) {
@@ -165,7 +163,7 @@ public class Shell {
         }
     }
 
-    private void handleOutputMethod(String arg2) throws Exception {
+    private void handleOutputMethod(String arg2) throws AsciiArtException {
         String errMsg = "Did not change output method due to incorrect " +
                 "format.";
         switch (arg2) {
@@ -180,7 +178,7 @@ public class Shell {
         }
     }
 
-    private void handleResolution(String arg2) throws Exception {
+    private void handleResolution(String arg2) throws AsciiArtException {
         // init
         int maxCharsInRow = this.image.getWidth();
         int minCharsInRow = Math.max(1,
@@ -214,9 +212,10 @@ public class Shell {
         System.out.println(String.format(outMsg, this.resolution));
     }
 
-    private void handleAddRemove(String arg2, boolean isAdd) throws Exception {
+    private void handleAddRemove(String arg2, boolean isAdd) throws AsciiArtException {
         String cmd = isAdd ? CMD_ADD : CMD_REMOVE;
         if (arg2.isEmpty()) {
+            // todo err
             System.out.println("did not " + cmd + " due to incorrect" +
                     " format.");
             return;
@@ -329,12 +328,9 @@ public class Shell {
      * Main method.
      *
      * @param args command line arguments.
-     * @throws IOException if an I/O error occurs.
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         // parse args. input format: java shell <imagePath>.
-//        String imagePath = args[0];
-        // todo: test valid image path
         String imagePath = "/cs/usr/ron.levin1/IdeaProjects/ASCII_Art" +
                 "/examples/cat.jpeg";
         Shell shell = new Shell(DEFAULT_CHARSET,

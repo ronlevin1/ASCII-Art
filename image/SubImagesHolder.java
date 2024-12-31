@@ -8,8 +8,6 @@ import java.io.IOException;
  * This class is responsible for holding an image and its sub-images.
  */
 public class SubImagesHolder {
-
-
     private final Image image;
     private int resolution;
     private int subImgSize;

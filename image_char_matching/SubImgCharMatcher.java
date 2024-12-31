@@ -91,7 +91,9 @@ public class SubImgCharMatcher {
         for (MyChar c : charset) {
             double charBrightness = c.getNormalizedBrightness();
             double diff;
+            //double edgeCaseDiff;
             //todo: test this switch
+            // todo: extract to outer scope/implement interface strategy
             switch (this.roundMethod) {
                 case DEFUALT_ROUND:
                     diff = Math.abs(charBrightness - brightness);
