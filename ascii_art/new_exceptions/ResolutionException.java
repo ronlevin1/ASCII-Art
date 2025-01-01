@@ -7,9 +7,9 @@ package ascii_art.new_exceptions;
  * processing.
  */
 public class ResolutionException extends AsciiArtException {
-    public static final String EXCEEDING_BOUNDARIES = "Did not change " +
+    private static final String EXCEEDING_BOUNDARIES = "Did not change " +
             "resolution due to exceeding boundaries.";
-    public static final String INCORRECT_FORMAT = "Did not change resolution" +
+    private static final String INCORRECT_FORMAT = "Did not change resolution" +
             " due to incorrect format.";
 
     /**

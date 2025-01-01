@@ -4,7 +4,7 @@ package ascii_art.new_exceptions;
  * Exception thrown when an invalid charset is encountered.
  */
 public class CharsetException extends AsciiArtException {
-    public static final String INCORRECT_FORMAT = "Did not %s due to " +
+    private static final String INCORRECT_FORMAT = "Did not %s due to " +
             "incorrect format.";
 
     /**
