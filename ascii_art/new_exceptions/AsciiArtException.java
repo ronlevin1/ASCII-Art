@@ -4,6 +4,9 @@ package ascii_art.new_exceptions;
  * Base Exception Class for ASCII Art related exceptions.
  */
 public class AsciiArtException extends Exception {
+    /**
+     * The detail message string of this AsciiArtException instance.
+     */
     private String message;
 
     /**

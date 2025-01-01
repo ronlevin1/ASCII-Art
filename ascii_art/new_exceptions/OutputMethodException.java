@@ -4,7 +4,7 @@ package ascii_art.new_exceptions;
  * Exception thrown when an invalid rounding mode is encountered.
  */
 public class OutputMethodException extends AsciiArtException {
-    public static final String INCORRECT_FORMAT = "Did not change output " +
+    private static final String INCORRECT_FORMAT = "Did not change output " +
             "method due to incorrect format.";
 
     /**

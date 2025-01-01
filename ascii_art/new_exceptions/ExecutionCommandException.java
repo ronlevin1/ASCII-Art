@@ -5,9 +5,9 @@ package ascii_art.new_exceptions;
  * application.
  */
 public class ExecutionCommandException extends AsciiArtException {
-    public static final String DEFAULT_MESSAGE = "Did not execute due to " +
+    private static final String DEFAULT_MESSAGE = "Did not execute due to " +
             "incorrect command.";
-    public static final String CHARSET_TOO_SMALL = "Did not execute. Charset" +
+    private static final String CHARSET_TOO_SMALL = "Did not execute. Charset" +
             " is too small.";
 
     /**
