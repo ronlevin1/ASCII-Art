@@ -1,9 +1,7 @@
 package ascii_art;
 
-//TODO: document
 
-import ascii_art.new_exceptions.AsciiArtException;
-import ascii_art.new_exceptions.ExecutionCommandException;
+import ascii_art.new_exceptions.*;
 import ascii_output.AsciiOutput;
 import ascii_output.ConsoleAsciiOutput;
 import ascii_output.HtmlAsciiOutput;
@@ -18,6 +16,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * The Shell class provides a command-line interface for generating ASCII art
+ * from images. It supports various commands for manipulating the character
+ * set,
+ * resolution, output method, and more.
+ */
 public class Shell {
     // default args
     private static final char[] DEFAULT_CHARSET = "0123456789".toCharArray();
@@ -57,6 +61,14 @@ public class Shell {
     private SubImagesHolder subImgsHolder;
     private SubImgCharMatcher matcher;
 
+    /**
+     * Constructs a Shell object with the specified charset, resolution, and
+     * round method.
+     *
+     * @param charset     the character set to use for ASCII art
+     * @param resolution  the resolution of the ASCII art
+     * @param roundMethod the method to use for rounding brightness values
+     */
     public Shell(char[] charset, int resolution,
                  String roundMethod) {
 
@@ -66,6 +78,11 @@ public class Shell {
         VALID_COMMANDS.addAll(Arrays.asList(VALID_COMMANDS_ARR));
     }
 
+    /**
+     * Runs the Shell with the specified image name.
+     *
+     * @param imageName the name of the image file to process
+     */
     public void run(String imageName) {
         try {
             // Init and pad image fields
@@ -95,10 +112,15 @@ public class Shell {
         } // while
     } // method
 
+    /**
+     * Executes the specified command with the given argument.
+     *
+     * @param arg1 the command to execute
+     * @param arg2 the argument for the command
+     * @throws AsciiArtException if an error occurs while executing the command
+     */
     private void executeCommand(String arg1, String arg2) throws AsciiArtException {
-        String errMsg = "Did not execute due to incorrect command.";
         // execute cmd (ignore its tail if exists).
-        // todo exceptions for all cases
         switch (arg1) {
             case CMD_CHARS:
                 matcher.printCharset();
@@ -122,12 +144,14 @@ public class Shell {
                 handleRun();
                 break;
             default:
+                // throw incorrect command exception
                 throw new ExecutionCommandException(false);
         } // switch
     }
 
     private void handleRun() throws AsciiArtException {
         if (this.matcher.getCharsetSize() < 2) {
+            // throw a 'charset too small' exception
             throw new ExecutionCommandException(true);
         }
         char[][] asciiChars =
@@ -143,8 +167,6 @@ public class Shell {
     }
 
     private void handleRoundMethod(String arg2) throws AsciiArtException {
-        String errMsg = "Did not change rounding method due to incorrect " +
-                "format.";
         switch (arg2) {
             case DEFAULT_ROUND_METHOD:
                 matcher.setRoundMethod(DEFAULT_ROUND_METHOD);
@@ -156,13 +178,11 @@ public class Shell {
                 matcher.setRoundMethod(CMD_DOWN);
                 break;
             default:
-                System.out.println(errMsg);
+                throw new RoundingMethodException();
         }
     }
 
     private void handleOutputMethod(String arg2) throws AsciiArtException {
-        String errMsg = "Did not change output method due to incorrect " +
-                "format.";
         switch (arg2) {
             case DEFAULT_OUTPUT_METHOD:
                 this.outputMethod = DEFAULT_OUTPUT_METHOD;
@@ -171,7 +191,7 @@ public class Shell {
                 this.outputMethod = "html";
                 break;
             default:
-                System.out.println(errMsg); //todo: throw exception?
+                throw new OutputMethodException();
         }
     }
 
@@ -182,11 +202,6 @@ public class Shell {
                 this.image.getWidth() / this.image.getHeight());
         int newRes = this.resolution;
         String outMsg = "Resolution set to %d";
-        String boundriesErrMsg = "Did not change resolution due to exceeding" +
-                " " +
-                "boundaries.";
-        String formatErrMsg2 = "Did not change resolution due to incorrect" +
-                " format.";
         //
         if (arg2.isEmpty()) {
             System.out.println(String.format(outMsg, this.resolution));
@@ -196,14 +211,10 @@ public class Shell {
         } else if (arg2.equals(CMD_DOWN)) {
             newRes = this.resolution / 2;
         } else { // illegal format
-            System.out.println(formatErrMsg2);
-            //todo: throw exception?
-            return;
+            throw new ResolutionException(true);
         }
         if (newRes < minCharsInRow || newRes > maxCharsInRow) {
-            System.out.println(boundriesErrMsg);
-            //todo: throw exception?
-            return;
+            throw new ResolutionException(false);
         }
         // update res & create new subImagesHolder
         this.resolution = newRes;
@@ -214,10 +225,7 @@ public class Shell {
     private void handleAddRemove(String arg2, boolean isAdd) throws AsciiArtException {
         String cmd = isAdd ? CMD_ADD : CMD_REMOVE;
         if (arg2.isEmpty()) {
-            // todo err
-            System.out.println("did not " + cmd + " due to incorrect" +
-                    " format.");
-            return;
+            throw new CharsetException(isAdd);
         }
         List<Character> charset = new ArrayList<>();
         /*
@@ -234,20 +242,20 @@ public class Shell {
             executeAddRemoveOnMatcher(isAdd, charset);
             return;
         }
-        if (flag1 == EXIT_FAILURE || flag2 == EXIT_FAILURE || flag3 ==
-                EXIT_FAILURE) {
-            System.out.println("did not " + cmd + " due to incorrect" +
-                    " format.");
-            return;
-        }
+        // otherwise, print error message.
+        throw new CharsetException(isAdd);
+        //todo: delete after testing.
+//        if (flag1 == EXIT_FAILURE || flag2 == EXIT_FAILURE || flag3 ==
+//                EXIT_FAILURE) {
+//            throw new CharsetException(isAdd);
+//        }
         // flags are EXIT_CHECK_NEXT_CONDITION
-        //todo: reformat err msg
-        System.out.println("did not " + cmd + " due to incorrect" +
-                " format.");
+//        throw new CharsetException(isAdd);
     } // method
 
     /**
-     * @return 1 if successful, 0 if failed, -1 if not a single char.
+     * @return 1 if successful, 0 if failed completely, or -1 to continue to
+     * next check.
      */
     private static int trySingleCharCMD(String arg2, List<Character> charset) {
         if (arg2.length() == 1) {
@@ -264,7 +272,8 @@ public class Shell {
     }
 
     /**
-     * @return true if successful, false otherwise.
+     * @return 1 if successful, 0 if failed completely, or -1 to continue to
+     * next check.
      */
     private int tryRangeCMD(String arg2, List<Character> charset,
                             String cmd) {
@@ -289,7 +298,8 @@ public class Shell {
     }
 
     /**
-     * @return 1 if successful, 0 if failed, -1 if not a single char.
+     * @return 1 if successful, 0 if failed completely, or -1 to continue to
+     * next check.
      */
     private int tryAllOrSpaceCMD(String arg2, List<Character> charset,
                                  String cmd) {
@@ -338,7 +348,8 @@ public class Shell {
     }
 }
 // CLI:
-// java ascii_art/Shell.java /cs/usr/ron.levin1/IdeaProjects/ASCII_Art/ascii_art/Shell.java
+// java ascii_art/Shell.java /cs/usr/ron
+// .levin1/IdeaProjects/ASCII_Art/ascii_art/Shell.java
 
 // presubmit: CLI
 // ~oop1/ex3_presubmit /cs/usr/ron.levin1/Desktop/ex3.zip

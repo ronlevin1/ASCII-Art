@@ -1,6 +1,6 @@
 package image;
 
-//TODO: document
+
 import image_char_matching.SubImgCharMatcher;
 
 import java.awt.*;
@@ -17,11 +17,22 @@ public class SubImage extends Image {
     private final Color[][] subImage;
     private double brightness;
 
+    /**
+     * Constructs a SubImage object with the specified pixel array, width,
+     * and height.
+     * Calculates the brightness of the sub-image.
+     *
+     * @param pixelArray the 2D array of Color objects representing the
+     *                   sub-image
+     * @param width      the width of the sub-image
+     * @param height     the height of the sub-image
+     */
     public SubImage(Color[][] pixelArray, int width, int height) {
         super(pixelArray, width, height);
         this.subImage = pixelArray;
         this.brightness = calcBrightness();
     }
+
     /**
      * Returns the grey-scale brightness of the sub-image, normalized.
      *

@@ -185,6 +185,9 @@ public class SubImgCharMatcher {
         }
     }
 
+    /**
+     * Prints the charset.
+     */
     public void printCharset() {
         if (this.charset.isEmpty()) {
             return;
@@ -196,15 +199,25 @@ public class SubImgCharMatcher {
         System.out.println();
     }
 
+    /**
+     * Setter for the round method.
+     *
+     * @return the round method.
+     */
     public void setRoundMethod(String roundMethod) {
         this.roundMethod = roundMethod;
     }
 
+    /**
+     * Getter for the charset size.
+     *
+     * @return the size of the charset.
+     */
     public int getCharsetSize() {
         return charset.size();
     }
 
-//    // uncomment for testing
+    // uncomment for testing
 //    static void addChar_addsNewCharToCharset() {
 //        SubImgCharMatcher matcher = new SubImgCharMatcher(new char[]{'a',
 //                'b'});
@@ -276,7 +289,7 @@ public class SubImgCharMatcher {
 ////        removeChar_updatesMinMaxBrightnessAfterRemoval();
 ////        removeChar_normalizesBrightnessForAllCharsAfterRemoval();
 //    }
-}
 //}
+}
 
 

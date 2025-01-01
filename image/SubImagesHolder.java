@@ -1,5 +1,5 @@
 package image;
-//TODO: document
+
 import java.awt.*;
 import java.io.IOException;
 
@@ -13,18 +13,43 @@ public class SubImagesHolder {
     private int subImgSize;
     private SubImage[][] subImages;
 
+    /**
+     * Returns the 2D array of sub-images.
+     *
+     * @return the 2D array of sub-images
+     */
     public SubImage[][] getSubImages() {
         return subImages;
     }
 
+    /**
+     * Returns the original image.
+     *
+     * @return the original image
+     */
     public Image getImage() {
         return image;
     }
 
+    /**
+     * Returns the brightness of the sub-image at the specified indices.
+     *
+     * @param i the row index of the sub-image
+     * @param j the column index of the sub-image
+     * @return the brightness of the sub-image
+     */
     public double getBrightness(int i, int j) {
         return subImages[i][j].getBrightness();
     }
 
+    /**
+     * Constructs a SubImagesHolder object with the specified image and
+     * resolution.
+     * Divides the image into sub-images based on the resolution.
+     *
+     * @param image      the image to divide into sub-images
+     * @param resolution the number of sub-images along the width of the image
+     */
     public SubImagesHolder(Image image, int resolution) {
         this.image = image;
         this.resolution = resolution;
@@ -46,7 +71,6 @@ public class SubImagesHolder {
                 for (int k = 0; k < subImgSize; k++) {
                     for (int l = 0; l < subImgSize; l++) {
                         // fill sub-image matrix with appropriate pixels.
-                        //todo: check pixel calculation
                         //int pixelX = Math.min(i + k, image.getHeight() - 1);
                         //int pixelY = Math.min(j + l, image.getWidth() - 1);
                         curSubImage[k][l] = image.getPixel(i + k, j + l);

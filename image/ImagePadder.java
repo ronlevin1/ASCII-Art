@@ -1,27 +1,43 @@
 package image;
 
-//TODO: document
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * The ImagePadder class provides functionality to pad an image with white
+ * pixels
+ * such that its dimensions are powers of 2.
+ */
 public class ImagePadder {
     private final Image image;
     // half of the padding on each side.
     private final int paddingX;
     private final int paddingY;
 
+    /**
+     * Constructs an ImagePadder object with the specified image.
+     * Calculates the padding needed to make the image's width and height
+     * powers of 2.
+     *
+     * @param image the image to pad
+     */
     public ImagePadder(Image image) {
         this.image = image;
         /*
         calc padding s.t. img width and height are both divisible by 2.
         meaning, find the smallest padding s.t. the new width and height are
          both 2^k for some k.
-         padding is simetric on each side.
+         padding is symmetric on each side.
          */
         this.paddingX = calcHalfPadding(image.getWidth());
         this.paddingY = calcHalfPadding(image.getHeight());
     }
 
+    /**
+     * Pads the image with white pixels and returns the padded image.
+     *
+     * @return the padded image
+     */
     public Image pad() {
         int newWidth = image.getWidth() + 2 * paddingX;
         int newHeight = image.getHeight() + 2 * paddingY;
