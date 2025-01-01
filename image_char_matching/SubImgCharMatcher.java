@@ -72,7 +72,10 @@ public class SubImgCharMatcher {
     private void normalizeCharsetBrightness() {
         for (MyChar c : charset) {
             double curBrightness = c.getBooleanBrightness();
-            c.setNormalizedBrightness((curBrightness - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
+            c.setNormalizedBrightness(
+                    (curBrightness - minBoolBrightness) /
+                            (maxBoolBrightness - minBoolBrightness)
+            );
         }
     }
 
@@ -157,7 +160,9 @@ public class SubImgCharMatcher {
             normalizeCharsetBrightness();
         } else {
             //otherwise, update only the new char's normalized brightness
-            newChar.setNormalizedBrightness((curBrightness - minBoolBrightness) / (maxBoolBrightness - minBoolBrightness));
+            newChar.setNormalizedBrightness(
+                    (curBrightness - minBoolBrightness) /
+                            (maxBoolBrightness - minBoolBrightness));
         }
 //        normalizeCharsetBrightness();
     }
