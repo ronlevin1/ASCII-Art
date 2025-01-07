@@ -53,7 +53,8 @@ We built a few custom exception classes.
 - ExecutionCommandException, OutputMethodException, ResolutionException, and CharsetException:
     Other custom exceptions that handle specific error conditions.
 Throwing Exceptions:
-In the Shell class, for each input command theres a method that handles it and throws exceptions when error conditions are met.
+In the Shell class, for each input command theres a method that handles it and throws exceptions when error 
+conditions are met.
 i.e:
 - handleRoundMethod throws RoundingMethodException if an invalid rounding method is provided.
 - handleOutputMethod throws OutputMethodException if an invalid output method is provided.
