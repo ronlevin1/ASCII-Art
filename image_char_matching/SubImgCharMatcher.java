@@ -33,19 +33,19 @@ public class SubImgCharMatcher {
         this.roundMethod = DEFUALT_ROUND;
     }
 
-    /**
-     * Second Constructor to accept round method var.
-     *
-     * @param charset     the characters to match to.
-     * @param roundMethod the rounding method to use.
-     */
-    public SubImgCharMatcher(char[] charset, String roundMethod) {
-        //todo: change this Ctor to public method called resetMatcher?
-        setCharset(charset);
-        updateMinMaxBoolBrightness();
-        normalizeCharsetBrightness();
-        this.roundMethod = roundMethod;
-    }
+//    /**
+//     * Second Constructor to accept round method var.
+//     *
+//     * @param charset     the characters to match to.
+//     * @param roundMethod the rounding method to use.
+//     */
+//    public SubImgCharMatcher(char[] charset, String roundMethod) {
+//        //todo: change this Ctor to public method called resetMatcher?
+//        setCharset(charset);
+//        updateMinMaxBoolBrightness();
+//        normalizeCharsetBrightness();
+//        this.roundMethod = roundMethod;
+//    }
 
     private void setCharset(char[] charset) {
         for (char c : charset) {
