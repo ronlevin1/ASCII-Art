@@ -65,9 +65,15 @@ When an exception is caught, a corresponding exception is thrown. The run method
 and handles it by printing an error message, allowing the program to continue running or terminate gracefully.
 
 4. SubImgCharMatcher API changes.
-- Added Constructor with String roundMethod input param:
+- Added printCharset method: since this class holds the charset, we though that
+    it would be appropriate to make it handle printing it, according to the
+    encapsulation principle.
+- Added setRoundMethod method: since this class is responsible to match a char to a
+    given sub-image, and the matching is changed with the rounding method, we though
+    that it would be appropriate to have this method here, according to the
+    encapsulation principle.
+- Added getCharsetSize method: this is need in order to handle resolution lower boundary error.
+    the class that handles it is not this one, so we thought it is needed to be able to share this
+    info with outer scopes.
 
-    Also, this allows a future extension of the program to be set with a different default rounding method.
-- print
-- setRoundMethod
-- getCharsetSize to handle res lower boundary.
+5. None.
