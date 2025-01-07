@@ -348,8 +348,7 @@ public class Shell {
     }
 }
 // CLI:
-// java ascii_art/Shell.java /cs/usr/ron
-// .levin1/IdeaProjects/ASCII_Art/ascii_art/Shell.java
+// java ascii_art/Shell.java examples/cat.jpeg
 
 // presubmit: CLI
 // ~oop1/ex3_presubmit /cs/usr/ron.levin1/Desktop/ex3.zip
