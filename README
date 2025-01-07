@@ -1,4 +1,79 @@
 carmi.shaag,ron.levin1
 206882623,316409572
 
-// todo: UML + answer the Questions 
+1. classes description:
+
+- CharConverter: Renders a given character, according to how it looks in the given font
+to a 16x16 square black & white image (2D array of booleans).
+- MyChar: a decorator of the primitive char type. this class also holds for each char
+its 'boolean brightness' (number of black pixels ) as rendered in CharConverter;
+as well as a 'normalized brightness' value which is a normalized boolean-brightness
+relative to the char-set this char is part of.
+- SubImgCharMatcher: this class is responsible to match a char to given sub-image brightness.
+it hold a char-set of chars to choose from; can add/remove chars to it as well as print the set.
+to match a char to a given sub-image, it receives sub-image brightness value and finds the
+char in char-set that has the closest normalized-brightness value (according to the rounding method).
+
+- Image: converts a given image-file to a 2D array of color pixels.
+- ImagePadder: padds the input image with white pixels on each side to match the desired
+resolution dimensions.
+- SubImage: extends Image class in order to calculate the image brightness values.
+this is done thanks to the conversion of image-file to a 2D array of RGB values.
+- SubImagesHolder: splits the given input-image into sub-images, stores them in a 2D array
+and calculates each sub-image brightness value.
+later on this class is used with SubImgCharMatcher class to match a char to each sub-image.
+
+- Shell: implements UI. receives input commands, parses them and executes the relevant operation.
+creates and holds a SubImagesHolder with SubImgCharMatcher, which are passed to
+AsciiArtAlgorithm to execute the conversion algo'.
+- AsciiArtAlgorithm: executes the algo' that convert given image to ascii art.
+receives and holds a SubImagesHolder with SubImgCharMatcher to do so.
+- HtmlAsciiOutput/Console AsciiOutput: outputs the algo' conversion result to an
+html file/the console (according to the users desired method).
+
+Note: in the UML diagram, both in Shell and AsciiArtAlgorithm it doesn't show
+SubImagesHolder and SubImgCharMatcher fields for some reason. we could not make
+the program that created the diagram to show them.
+
+2. we used HashSet<MyChar> to store the charset in SubImgCharMatcher class.
+the operations executed on it are:
+- add/remove char with complexity of O(1).
+- print it with complexity of O(n*log n), since this requires sorting.
+we chose this data structure since the most common operations in our program on the charset are
+add/remove of a char. the time complexity of them is low so this is efficient.
+on the other side, when matching a sub-image to some char, it requires iterating the entire set to find
+the the char with closest brightness which result in O(n). we though to use TreeMap
+that could do that in O(log n). but building it to be sorted by brightness value would
+result in higher complexity of other operations like add/remove char that would take O(log n) for each char.
+
+3. Exceptions:
+We built a few custom exception classes.
+- AsciiArtException: A base exception class for all ASCII art-related exceptions.
+- RoundingMethodException: Extends AsciiArtException and is thrown when an invalid rounding method is given.
+- ExecutionCommandException, OutputMethodException, ResolutionException, and CharsetException:
+    Other custom exceptions that handle specific error conditions.
+Throwing Exceptions:
+In the Shell class, for each input command theres a method that handles it and throws exceptions when error conditions are met.
+i.e:
+- handleRoundMethod throws RoundingMethodException if an invalid rounding method is provided.
+- handleOutputMethod throws OutputMethodException if an invalid output method is provided.
+- handleResolution throws ResolutionException if the resolution is out of bounds or the format is incorrect.
+- handleAddRemove throws CharsetException if the character set modification command is invalid.
+Catching Exceptions and Handling Flow:
+In Shell.run() method, a try-catch block is used to catch AsciiArtException and its subclasses.
+When an exception is caught, a corresponding exception is thrown. The run method catches the exception
+and handles it by printing an error message, allowing the program to continue running or terminate gracefully.
+
+4. SubImgCharMatcher API changes.
+- Added printCharset method: since this class holds the charset, we though that
+    it would be appropriate to make it handle printing it, according to the
+    encapsulation principle.
+- Added setRoundMethod method: since this class is responsible to match a char to a
+    given sub-image, and the matching is changed with the rounding method, we though
+    that it would be appropriate to have this method here, according to the
+    encapsulation principle.
+- Added getCharsetSize method: this is need in order to handle resolution lower boundary error.
+    the class that handles it is not this one, so we thought it is needed to be able to share this
+    info with outer scopes.
+
+5. None.

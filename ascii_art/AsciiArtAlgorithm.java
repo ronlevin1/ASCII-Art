@@ -41,11 +41,7 @@ public class AsciiArtAlgorithm {
 
         for (int i = 0; i < numOfRows; i++) {
             for (int j = 0; j < numOfCols; j++) {
-
                 curBrightness = subImagesHolder.getBrightness(i, j);
-//                String outName = (String.format("tests/asciiAlgo/%d_%d",
-//                i, j));
-//                subImagesHolder.getSubImages()[i][j].saveImage(outName);
                 char bestMatch =
                         matcher.getCharByImageBrightness(curBrightness);
                 asciiChars[i][j] = bestMatch;

@@ -61,19 +61,30 @@ public class Shell {
     private SubImagesHolder subImgsHolder;
     private SubImgCharMatcher matcher;
 
+//    /**
+//     * Constructs a Shell object with the specified charset, resolution, and
+//     * round method.
+//     *
+//     * @param charset     the character set to use for ASCII art
+//     * @param resolution  the resolution of the ASCII art
+//     * @param roundMethod the method to use for rounding brightness values
+//     */
+//    public Shell(char[] charset, int resolution,
+//                 String roundMethod) {
+//
+////        this.matcher = new SubImgCharMatcher(charset, roundMethod);
+//        this.matcher = new SubImgCharMatcher(charset);
+//        this.resolution = resolution;
+//        this.outputMethod = DEFAULT_OUTPUT_METHOD;
+//        VALID_COMMANDS.addAll(Arrays.asList(VALID_COMMANDS_ARR));
+//    }
     /**
-     * Constructs a Shell object with the specified charset, resolution, and
+     * Constructs a Shell object with default charset, resolution, and
      * round method.
-     *
-     * @param charset     the character set to use for ASCII art
-     * @param resolution  the resolution of the ASCII art
-     * @param roundMethod the method to use for rounding brightness values
      */
-    public Shell(char[] charset, int resolution,
-                 String roundMethod) {
-
-        this.matcher = new SubImgCharMatcher(charset, roundMethod);
-        this.resolution = resolution;
+    public Shell() {
+        this.matcher = new SubImgCharMatcher(DEFAULT_CHARSET);
+        this.resolution = DEFAULT_RES;
         this.outputMethod = DEFAULT_OUTPUT_METHOD;
         VALID_COMMANDS.addAll(Arrays.asList(VALID_COMMANDS_ARR));
     }
@@ -244,13 +255,6 @@ public class Shell {
         }
         // otherwise, print error message.
         throw new CharsetException(isAdd);
-        //todo: delete after testing.
-//        if (flag1 == EXIT_FAILURE || flag2 == EXIT_FAILURE || flag3 ==
-//                EXIT_FAILURE) {
-//            throw new CharsetException(isAdd);
-//        }
-        // flags are EXIT_CHECK_NEXT_CONDITION
-//        throw new CharsetException(isAdd);
     } // method
 
     /**
@@ -339,17 +343,17 @@ public class Shell {
      */
     public static void main(String[] args) {
         // parse args. input format: java shell <imagePath>.
+//        shell.run(imagePath);
+        Shell shell = new Shell();
+        shell.run(args[0]);
 //        String imagePath = "/cs/usr/ron.levin1/IdeaProjects/ASCII_Art" +
 //                "/examples/cat.jpeg";
-        Shell shell = new Shell(DEFAULT_CHARSET,
-                DEFAULT_RES, DEFAULT_ROUND_METHOD);
-//        shell.run(imagePath);
-        shell.run(args[0]);
+//        Shell shell = new Shell(DEFAULT_CHARSET,
+//                DEFAULT_RES, DEFAULT_ROUND_METHOD);
     }
 }
 // CLI:
-// java ascii_art/Shell.java /cs/usr/ron
-// .levin1/IdeaProjects/ASCII_Art/ascii_art/Shell.java
+// java ascii_art/Shell.java examples/cat.jpeg
 
 // presubmit: CLI
 // ~oop1/ex3_presubmit /cs/usr/ron.levin1/Desktop/ex3.zip
