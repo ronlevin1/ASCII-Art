@@ -9,6 +9,9 @@ import java.io.IOException;
  * such that its dimensions are powers of 2.
  */
 public class ImagePadder {
+    private static final int WHITE_RGB_VAL = 255;
+    private static final String ERR_DIMENSION_NOT_EVEN = "Dimension must be even.";
+    private static final int NUM_2 = 2;
     private final Image image;
     // half of the padding on each side.
     private final int paddingX;
@@ -39,14 +42,14 @@ public class ImagePadder {
      * @return the padded image
      */
     public Image pad() {
-        int newWidth = image.getWidth() + 2 * paddingX;
-        int newHeight = image.getHeight() + 2 * paddingY;
+        int newWidth = image.getWidth() + NUM_2 * paddingX;
+        int newHeight = image.getHeight() + NUM_2 * paddingY;
         Color[][] newPixelArray = new Color[newHeight][newWidth];
         for (int i = 0; i < newHeight; i++) {
             for (int j = 0; j < newWidth; j++) {
                 // if we are in the padding area, set the pixel to white.
                 if (i < paddingY || i >= newHeight - paddingY || j < paddingX || j >= newWidth - paddingX) {
-                    newPixelArray[i][j] = new Color(255, 255, 255);
+                    newPixelArray[i][j] = new Color(WHITE_RGB_VAL, WHITE_RGB_VAL, WHITE_RGB_VAL);
                 } else {
                     // else, set the pixel to the original image's pixel.
                     newPixelArray[i][j] = image.getPixel(i - paddingY,
@@ -65,14 +68,14 @@ public class ImagePadder {
      */
     private int calcHalfPadding(int dim) {
         // if the dimension is not even, throw an exception.
-        if (dim % 2 != 0) {
-            throw new IllegalArgumentException("Dimension must be even.");
+        if (dim % NUM_2 != 0) {
+            throw new IllegalArgumentException(ERR_DIMENSION_NOT_EVEN);
         }
         int k = 0;
-        while (Math.pow(2, k) < dim) {
+        while (Math.pow(NUM_2, k) < dim) {
             k++;
         }
-        int nextPowerOf2 = (int) Math.pow(2, k);
-        return (nextPowerOf2 - dim) / 2;
+        int nextPowerOf2 = (int) Math.pow(NUM_2, k);
+        return (nextPowerOf2 - dim) / NUM_2;
     }
 }

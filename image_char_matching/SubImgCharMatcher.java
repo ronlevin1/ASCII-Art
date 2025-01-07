@@ -93,39 +93,34 @@ public class SubImgCharMatcher {
         //
         for (MyChar c : charset) {
             double charBrightness = c.getNormalizedBrightness();
-            double diff;
-            //double edgeCaseDiff;
-            //todo: test this switch
-            // todo: extract to outer scope/implement interface strategy
-            switch (this.roundMethod) {
-                case DEFUALT_ROUND:
-                    diff = Math.abs(charBrightness - brightness);
-                    break;
-                case CMD_UP:
-                    // makes choose of char with brightness closest from above
-                    diff = (charBrightness - brightness);
-                    if (diff < 0)
-                        // char brightness is BELOW image brightness
-                        continue;
-                    break;
-                case CMD_DOWN:
-                    // makes choose of char with brightness closest from below
-                    diff = (brightness - charBrightness);
-                    if (diff < 0)
-                        // char brightness is ABOVE image brightness
-                        continue;
-                    break;
-                default:
-                    diff = Math.abs(charBrightness - brightness);
-            }
+            double diff = getBrightnessDiff(brightness, charBrightness);
+            /* In case CMD is UP/DOWN: char brightness might be
+            BELOW/ABOVE image brightness -> irrelevant for this CMD */
+            if (diff < 0)
+                continue;
             if (diff < minDiff) {
                 minDiff = diff;
                 bestMatch = c.getChar();
-            } else if (diff == minDiff && c.getChar() < bestMatch) {
+            }
+            // same brightness, choose the one with the lower ASCII value
+            else if (diff == minDiff && c.getChar() < bestMatch) {
                 bestMatch = c.getChar();
             }
         }
         return bestMatch;
+    }
+
+    private double getBrightnessDiff(double brightness,
+                                     double charBrightness) {
+        double diff = switch (this.roundMethod) {
+            case DEFUALT_ROUND -> Math.abs(charBrightness - brightness);
+            // makes choose of char with brightness closest from above
+            case CMD_UP -> (charBrightness - brightness);
+            // makes choose of char with brightness closest from below
+            case CMD_DOWN -> (brightness - charBrightness);
+            default -> Math.abs(charBrightness - brightness);
+        };
+        return diff;
     }
 
 
@@ -139,11 +134,9 @@ public class SubImgCharMatcher {
         if (charset.contains(newChar)) {
             return;
         }
-        //
         boolean isMinMaxChanged = false;
         double curBrightness = newChar.getBooleanBrightness();
         charset.add(newChar);
-
         // update brightness: min, max (fields) and normalized (foreach char)
         if (curBrightness < minBoolBrightness) {
             minBoolBrightness = curBrightness;
@@ -164,7 +157,6 @@ public class SubImgCharMatcher {
                     (curBrightness - minBoolBrightness) /
                             (maxBoolBrightness - minBoolBrightness));
         }
-//        normalizeCharsetBrightness();
     }
 
     /**

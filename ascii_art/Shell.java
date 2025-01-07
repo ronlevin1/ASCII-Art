@@ -73,6 +73,7 @@ public class Shell {
                  String roundMethod) {
 
         this.matcher = new SubImgCharMatcher(charset, roundMethod);
+//        this.matcher = new SubImgCharMatcher(charset);
         this.resolution = resolution;
         this.outputMethod = DEFAULT_OUTPUT_METHOD;
         VALID_COMMANDS.addAll(Arrays.asList(VALID_COMMANDS_ARR));
@@ -244,13 +245,6 @@ public class Shell {
         }
         // otherwise, print error message.
         throw new CharsetException(isAdd);
-        //todo: delete after testing.
-//        if (flag1 == EXIT_FAILURE || flag2 == EXIT_FAILURE || flag3 ==
-//                EXIT_FAILURE) {
-//            throw new CharsetException(isAdd);
-//        }
-        // flags are EXIT_CHECK_NEXT_CONDITION
-//        throw new CharsetException(isAdd);
     } // method
 
     /**
@@ -349,7 +343,6 @@ public class Shell {
 }
 // CLI:
 // java ascii_art/Shell.java examples/cat.jpeg
-
 
 // presubmit: CLI
 // ~oop1/ex3_presubmit /cs/usr/ron.levin1/Desktop/ex3.zip
