@@ -18,8 +18,8 @@ Example images can be found in the `examples` directory.
 Clone the repo and run:
 
 ```bash
-git clone https://github.com/your-username/project-name.git
-cd project-name
+git clone https://github.com/ronlevin1/ASCII-Art
+cd ASCII-Art
 # To compile the project, run the following command from the root directory:
 javac ascii_art/*.java ascii_output/*.java image/*.java image_char_matching/*.java ascii_art/new_exceptions/*.java
 # To run the project:
