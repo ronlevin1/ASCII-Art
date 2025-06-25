@@ -1,48 +1,26 @@
-#ASCII\_Art
+# ASCII Art
 
-**Short description:**
-Image editing tool converting raster images into ASCII-art representations.
+**Short description:**  
+A Java-based application that converts images into ASCII art. This project is a solution for an Object-Oriented Programming course exercise at the Hebrew University of Jerusalem (HUJI).
 
 ## Features
-
-* 🔧 OOP-driven conversion pipeline (CharConverter, MyChar, SubImgCharMatcher, SubImagesHolder, AsciiArtAlgorithm)
-* ⚙️ Supports customizable character-sets & rounding methods
-* 🎯 Outputs to console or HTML (HtmlAsciiOutput / ConsoleAsciiOutput)
+- 🔧 Converts images (like JPEG) into ASCII art.
+- 🔧 Supports output to the console or an HTML file.
+- 🔧 Handles various image resolutions and character sets.
+- ⚙️ Written in Java.
+- 🎯 The main goal is to apply OOP principles to create a flexible and extensible ASCII art generator.
 
 ## Demo / Screenshot
-
-Open one of the HTML outputs in `examples/` to see rendered ASCII art.
+Example images can be found in the `examples` directory.
 
 ## Getting Started
+Clone the repo and run:
 
 ```bash
-git clone https://github.com/ronlevin1/ASCII_Art.git
-cd ASCII_Art
-# compile all .java under ascii_art/
-javac -d out $(find ascii_art -name "*.java")
+git clone https://github.com/your-username/project-name.git
+cd project-name
+# To compile the project, run the following command from the root directory:
+javac ascii_art/*.java ascii_output/*.java image/*.java image_char_matching/*.java ascii_art/new_exceptions/*.java
+# To run the project:
+java ascii_art.Shell
 ```
-
-## Usage
-
-Run the interactive shell to convert an image:
-
-```bash
-java -cp out ascii_art.Shell
-# then enter commands, for example:
-# load path/to/image.png
-# resolution 100x50
-# output html out.html
-# convert
-```
-
-## Structure
-
-```
-ascii_art/              # core conversion classes & Shell UI  
-image/                  # sample input images  
-examples/               # example commands & scripts  
-ascii_output/           # saved ASCII-art outputs (HTML & text)  
-image_char_matching/    # char-brightness matching utilities  
-tests/                  # JUnit test suite  
-```
-
