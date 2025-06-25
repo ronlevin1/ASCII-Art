@@ -1,23 +1,26 @@
-# ASCII_Art
+# ASCII\_Art
 
-**Short description:**  
-Image editing tool converting raster images into ASCII-art representations :contentReference[oaicite:0]{index=0}
+**Short description:**
+Image editing tool converting raster images into ASCII-art representations.
 
 ## Features
-- 🔧 OOP-driven conversion pipeline (CharConverter, MyChar, SubImgCharMatcher, SubImagesHolder, AsciiArtAlgorithm)  
-- ⚙️ Supports customizable character-sets & rounding methods  
-- 🎯 Outputs to console or HTML (HtmlAsciiOutput / ConsoleAsciiOutput)
+
+* 🔧 OOP-driven conversion pipeline (CharConverter, MyChar, SubImgCharMatcher, SubImagesHolder, AsciiArtAlgorithm)
+* ⚙️ Supports customizable character-sets & rounding methods
+* 🎯 Outputs to console or HTML (HtmlAsciiOutput / ConsoleAsciiOutput)
 
 ## Demo / Screenshot
+
 Open one of the HTML outputs in `ascii_output/` to see rendered ASCII art.
 
 ## Getting Started
+
 ```bash
 git clone https://github.com/ronlevin1/ASCII_Art.git
 cd ASCII_Art
 # compile all .java under ascii_art/
 javac -d out $(find ascii_art -name "*.java")
-````
+```
 
 ## Usage
 
@@ -53,7 +56,3 @@ tests/                  # JUnit test suite
 
 Ron Levin – 3rd Year CS Student @ Hebrew University
 [GitHub](https://github.com/ronlevin1) | \[Email]
-
-```
-::contentReference[oaicite:1]{index=1}
-```
