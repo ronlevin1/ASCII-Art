@@ -12,7 +12,7 @@ A Java-based application that converts images into ASCII art. This project is a 
 
 ## Demo / Screenshot
 Example images can be found in the `examples` directory.
-![Screenshot placeholder](examples/demo_cat_output)
+![Screenshot placeholder](examples/demo_cat_output.png)
 
 ## Getting Started
 Clone the repo and run:
