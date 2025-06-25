@@ -1,4 +1,4 @@
-# ASCII\_Art
+#ASCII\_Art
 
 **Short description:**
 Image editing tool converting raster images into ASCII-art representations.
@@ -11,7 +11,7 @@ Image editing tool converting raster images into ASCII-art representations.
 
 ## Demo / Screenshot
 
-Open one of the HTML outputs in `ascii_output/` to see rendered ASCII art.
+Open one of the HTML outputs in `examples/` to see rendered ASCII art.
 
 ## Getting Started
 
@@ -46,13 +46,3 @@ image_char_matching/    # char-brightness matching utilities
 tests/                  # JUnit test suite  
 ```
 
-## Technologies
-
-* Language: Java
-* Testing: JUnit
-* Build: plain `javac` / `java` (no external dependencies)
-
-## Author
-
-Ron Levin – 3rd Year CS Student @ Hebrew University
-[GitHub](https://github.com/ronlevin1) | \[Email]
